@@ -77,9 +77,11 @@ public class Grid
         //#region Add the children to the grid
         for (Node child : childrenToAdd)
         {
+            //Get/set the desired constraints for the child.
             GridBagConstraints constraints = new GridBagConstraints();
 
-            //Get/set the desired constraints for the child.
+            constraints.anchor = GetAlignment(child);
+
             if (child.hasAttributes())
             {
                 Node rowAttribute = child.getAttributes().getNamedItem("Grid.Row");
@@ -259,6 +261,98 @@ public class Grid
             {
                 definitions.set(i, new Pair<>(2, autoWeight));
             }
+        }
+    }
+
+    private static int GetAlignment(Node node)
+    {
+        if (!node.hasAttributes())
+            return GridBagConstraints.CENTER;
+
+        //Get the vertical alignment.
+        int verticalAlignment = GridBagConstraints.CENTER;
+        Node verticalAlignmentAttribute = node.getAttributes().getNamedItem("VerticalAlignment");
+        if (verticalAlignmentAttribute != null)
+        {
+            switch (verticalAlignmentAttribute.getNodeValue())
+            {
+                case "Top":
+                    verticalAlignment = GridBagConstraints.NORTH;
+                    break;
+                case "Center":
+                    verticalAlignment = GridBagConstraints.CENTER;
+                    break;
+                case "Bottom":
+                    verticalAlignment = GridBagConstraints.SOUTH;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid value for VerticalAlignment attribute.");
+            }
+        }
+
+        //Get the horizontal alignment.
+        int horizontalAlignment = GridBagConstraints.CENTER;
+        Node horizontalAlignmentAttribute = node.getAttributes().getNamedItem("HorizontalAlignment");
+        if (horizontalAlignmentAttribute != null)
+        {
+            switch (horizontalAlignmentAttribute.getNodeValue())
+            {
+                case "Left":
+                    horizontalAlignment = GridBagConstraints.WEST;
+                    break;
+                case "Center":
+                    horizontalAlignment = GridBagConstraints.CENTER;
+                    break;
+                case "Right":
+                    horizontalAlignment = GridBagConstraints.EAST;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid value for HorizontalAlignment attribute.");
+            }
+        }
+
+        //Combine the alignments.
+        //This could've been so much easier if the constraints could've been OR'd together to get the correct value.
+        switch (verticalAlignment)
+        {
+            case GridBagConstraints.NORTH:
+                switch (horizontalAlignment)
+                {
+                    case GridBagConstraints.WEST:
+                        return GridBagConstraints.NORTHWEST;
+                    case GridBagConstraints.CENTER:
+                        return GridBagConstraints.NORTH;
+                    case GridBagConstraints.EAST:
+                        return GridBagConstraints.NORTHEAST;
+                    default:
+                        throw new IllegalArgumentException("Invalid value for HorizontalAlignment attribute.");
+                }
+            case GridBagConstraints.CENTER:
+                switch (horizontalAlignment)
+                {
+                    case GridBagConstraints.WEST:
+                        return GridBagConstraints.WEST;
+                    case GridBagConstraints.CENTER:
+                        return GridBagConstraints.CENTER;
+                    case GridBagConstraints.EAST:
+                        return GridBagConstraints.EAST;
+                    default:
+                        throw new IllegalArgumentException("Invalid value for HorizontalAlignment attribute.");
+                }
+            case GridBagConstraints.SOUTH:
+                switch (horizontalAlignment)
+                {
+                    case GridBagConstraints.WEST:
+                        return GridBagConstraints.SOUTHWEST;
+                    case GridBagConstraints.CENTER:
+                        return GridBagConstraints.SOUTH;
+                    case GridBagConstraints.EAST:
+                        return GridBagConstraints.SOUTHEAST;
+                    default:
+                        throw new IllegalArgumentException("Invalid value for HorizontalAlignment attribute.");
+                }
+            default:
+                throw new IllegalArgumentException("Invalid value for VerticalAlignment attribute.");
         }
     }
 }
