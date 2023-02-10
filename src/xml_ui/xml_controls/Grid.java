@@ -183,7 +183,6 @@ public class Grid
      * 0: No weight (aka auto).
      * 1: Weight in pixels.
      * 2: Weight as a percentage (0-1).
-     * @throws SAXException
      */
     private static Pair<Integer, Float> GetWeightValue(Node node, String subNodeKey, String attributeName) throws SAXException
     {

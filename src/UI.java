@@ -1,8 +1,11 @@
+import java.util.List;
+
 import javax.swing.JFrame;
 
 import xml_ui.Observable;
 import xml_ui.XMLUI;
 import xml_ui.attributes.BindingAttribute;
+import xml_ui.attributes.EventCallbackAttribute;
 
 public class UI extends XMLUI
 {
@@ -29,5 +32,11 @@ public class UI extends XMLUI
             catch (InterruptedException e) {}
             backgroundColour.Set("#8400FF");
         }).start();
+    }
+
+    @EventCallbackAttribute
+    private void ButtonClickEvent(List<Object> args)
+    {
+        System.out.println("Button clicked!");
     }
 }
