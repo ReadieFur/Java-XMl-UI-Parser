@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.HashMap;
 
 import javax.naming.NamingException;
 import javax.xml.parsers.*;

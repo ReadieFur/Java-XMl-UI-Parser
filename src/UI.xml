@@ -4,7 +4,6 @@
     <Grid Rows="2" Columns="2">
         <Label Row="0" Column="0" Text="1"/>
         <Label Row="0" Column="1" Text="2"/>
-        <Button Row="1" Column="0" Content="Button 1"/>
-        <Button Row="1" Column="1" Content="Button 2"/>
+        <Button Row="1" Column="0" ColumnSpan="1" Content="Button"/>
     </Grid>
 </Window>
