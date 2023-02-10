@@ -1,56 +1,59 @@
 package xml_ui.xml_controls;
 
-import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
-
 import java.awt.Component;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import javax.swing.JFrame;
 
-public class Window extends Base
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
+
+import xml_ui.UIBuilder;
+import xml_ui.attributes.ChildBuilderAttribute;
+import xml_ui.attributes.CreatorAttribute;
+import xml_ui.attributes.SetterAttribute;
+
+public class Window
 {
-    // public String Title;
-    // public int Width;
-    // public int Height;
+    private Window(){}
 
-    @Override
-    public Component ParseXMLNode(Node xmlNode) throws SAXException
+    @CreatorAttribute
+    public static JFrame Create()
     {
-        JFrame frame = new JFrame();
+        return new JFrame();
+    }
 
-        //Set properties.
-        Base.SetBaseProperties(frame, xmlNode);
-        if (xmlNode.hasAttributes())
-        {
-            Node title = xmlNode.getAttributes().getNamedItem("Title");
-            if (title != null)
-                frame.setTitle(title.getNodeValue());
-            Node width = xmlNode.getAttributes().getNamedItem("Width");
-            Node height = xmlNode.getAttributes().getNamedItem("Height");
-            if (width != null && height != null)
-                frame.setSize(Integer.parseInt(width.getNodeValue()), Integer.parseInt(height.getNodeValue()));
-        }
+    @ChildBuilderAttribute
+    public static void AddChildren(JFrame frame, List<Node> children)
+        throws SAXException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, DOMException
+    {
+        //A window can only have one child.
+        if (children.size() > 1)
+            throw new SAXException("A window can only have one child.");
+        else if (children.isEmpty())
+            return;
 
-        //Parse child nodes.
-        //For this element we will only allow a single child node, however if it contains a resources node, we will ignore that specific node.
-        List<Node> childElements = Base.GetChildElements(xmlNode);
-        int childCount = 0;
-        Node childNode = null;
-        for (int i = 0; i < childElements.size(); i++)
-        {
-            //Ignore the Resources node.
-            if (childElements.get(i).getNodeName().equals("Resources"))
-                continue;
+        //Add the child to the window.
+        frame.add(UIBuilder.ParseXMLNode(children.get(0)));
+    }
 
-            if (++childCount > 1)
-                throw new SAXException("Window can only have a single child node.");
+    @SetterAttribute("Title")
+    public static void SetTitle(JFrame frame, String title)
+    {
+        frame.setTitle(title);
+    }
 
-            childNode = childElements.get(i);
-        }
-        if (childNode != null)
-            frame.add(Base.BaseParseXMLNode(childNode));
+    @SetterAttribute("Width")
+    public static void SetWidth(JFrame frame, String width)
+    {
+        frame.setSize(Integer.parseInt(width), frame.getHeight());
+    }
 
-        return frame;
+    @SetterAttribute("Height")
+    public static void SetHeight(JFrame frame, String height)
+    {
+        frame.setSize(frame.getWidth(), Integer.parseInt(height));
     }
 }

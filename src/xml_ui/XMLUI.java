@@ -1,6 +1,7 @@
 package xml_ui;
 import java.awt.Component;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.HashMap;
 
@@ -10,8 +11,6 @@ import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
-import xml_ui.xml_controls.Base;
-
 public abstract class XMLUI
 {
     //TODO: Resource binding will be implemented later.
@@ -19,7 +18,7 @@ public abstract class XMLUI
 
     protected Component rootElement;
 
-    protected XMLUI() throws NamingException, ParserConfigurationException, SAXException, IOException
+    protected XMLUI() throws NamingException, ParserConfigurationException, SAXException, IOException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, DOMException
     {
         //Gets the intermediate path to the class file which we will use to load the XML file.
         String className = this.getClass().getName();
@@ -57,7 +56,7 @@ public abstract class XMLUI
             // }
 
             //Next we will build up the XML UI tree.
-            rootElement = Base.BaseParseXMLNode(root);
+            rootElement = UIBuilder.ParseXMLNode(root);
             if (rootElement == null)
                 throw new SAXException("The content element could not be parsed.");
         }

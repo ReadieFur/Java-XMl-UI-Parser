@@ -1,38 +1,65 @@
 package xml_ui.xml_controls;
 
-import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
-
-import java.awt.Component;
-import java.util.List;
-
 import javax.swing.JButton;
 
-public class Button extends Base
+import xml_ui.attributes.CreatorAttribute;
+import xml_ui.attributes.SetterAttribute;
+
+public class Button
 {
-    // public String Content;
+    private Button(){}
 
-    @Override
-    public Component ParseXMLNode(Node xmlNode) throws SAXException
+    @CreatorAttribute
+    public static JButton Create()
     {
-        JButton button = new JButton();
+        return new JButton();
+    }
 
-        //Set properties.
-        Base.SetBaseProperties(button, xmlNode);
-        if (xmlNode.hasAttributes())
-        {
-            if (xmlNode.getAttributes().getNamedItem("Content") != null)
-                button.setText(xmlNode.getAttributes().getNamedItem("Content").getNodeValue());
-        }
+    @SetterAttribute("Content")
+    public static void SetText(JButton button, String text)
+    {
+        button.setText(text);
+    }
 
-        //Parse child nodes.
-        //For this element we will only allow a single child node.
-        List<Node> childElements = Base.GetChildElements(xmlNode);
-        if (childElements.size() > 1)
-            throw new SAXException("Button can only have a single child node.");
-        if (childElements.size() == 1)
-            button.add(Base.BaseParseXMLNode(childElements.get(0)));
+    @SetterAttribute("Width")
+    public static void SetWidth(JButton button, String width)
+    {
+        button.setSize(Integer.parseInt(width), button.getHeight());
+    }
 
-        return button;
+    @SetterAttribute("Height")
+    public static void SetHeight(JButton button, String height)
+    {
+        button.setSize(button.getWidth(), Integer.parseInt(height));
+    }
+
+    @SetterAttribute("X")
+    public static void SetX(JButton button, String x)
+    {
+        button.setLocation(Integer.parseInt(x), button.getY());
+    }
+
+    @SetterAttribute("Y")
+    public static void SetY(JButton button, String y)
+    {
+        button.setLocation(button.getX(), Integer.parseInt(y));
+    }
+
+    @SetterAttribute("Enabled")
+    public static void SetEnabled(JButton button, String enabled)
+    {
+        button.setEnabled(Boolean.parseBoolean(enabled));
+    }
+
+    @SetterAttribute("Visible")
+    public static void SetVisible(JButton button, String visible)
+    {
+        button.setVisible(Boolean.parseBoolean(visible));
+    }
+
+    @SetterAttribute("ToolTip")
+    public static void SetToolTip(JButton button, String toolTip)
+    {
+        button.setToolTipText(toolTip);
     }
 }
