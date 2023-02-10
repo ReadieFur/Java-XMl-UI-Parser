@@ -27,7 +27,7 @@ public class UIBuilder
 
     private UIBuilder(){}
 
-    //TODO: Optimize this method.
+    //TODO: Optimize this method AND CLEAN IT UP! (Move to an instanced class).
     //This is the base method for parsing XML nodes. It will try to find a corresponding class to create a Component from.
     public static Component ParseXMLNode(Node xmlNode, XMLUI context)
         throws ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, DOMException, SAXException
