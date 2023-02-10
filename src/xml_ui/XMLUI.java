@@ -1,3 +1,4 @@
+package xml_ui;
 import java.awt.Component;
 import java.io.*;
 import java.net.URL;
@@ -9,23 +10,20 @@ import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
-import xml_controls.Base;
+import xml_ui.xml_controls.Base;
 
-public abstract class Form
+public abstract class XMLUI
 {
     //TODO: Resource binding will be implemented later.
     // protected final HashMap<String, String> resources = new HashMap<String, String>();
 
     protected Component rootElement;
 
-    protected Form() throws NamingException, ParserConfigurationException, SAXException, IOException
+    protected XMLUI() throws NamingException, ParserConfigurationException, SAXException, IOException
     {
-        String className = this.getClass().getName();
-        if (!className.endsWith("_xml"))
-            throw new NamingException("Form class must end with '_xml'.");
-
         //Gets the intermediate path to the class file which we will use to load the XML file.
-        URL xmlPath = this.getClass().getResource(className.substring(0, className.length() - 4) + ".xml");
+        String className = this.getClass().getName();
+        URL xmlPath = this.getClass().getResource(className.substring(0, className.length()) + ".xml");
         InputStream xmlFileStream = xmlPath.openStream();
 
         try

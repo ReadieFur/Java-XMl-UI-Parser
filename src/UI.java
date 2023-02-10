@@ -1,10 +1,12 @@
 import javax.swing.JFrame;
 
-public class UI_xml extends Form
+import xml_ui.XMLUI;
+
+public class UI extends XMLUI
 {
     protected JFrame rootElement;
 
-    public UI_xml() throws Exception
+    public UI() throws Exception
     {
         super();
         this.rootElement = (JFrame)super.rootElement;

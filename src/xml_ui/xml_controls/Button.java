@@ -1,4 +1,4 @@
-package xml_controls;
+package xml_ui.xml_controls;
 
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;

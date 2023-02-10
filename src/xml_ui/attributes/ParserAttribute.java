@@ -1,4 +1,4 @@
-package xml_controls.attributes;
+package xml_ui.attributes;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

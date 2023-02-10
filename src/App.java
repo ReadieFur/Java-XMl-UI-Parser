@@ -21,7 +21,7 @@ public class App
     {
         try
         {
-            UI_xml ui = new UI_xml();
+            UI ui = new UI();
             ui.Show();
         }
         catch (Exception ex)
