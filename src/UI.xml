@@ -1,7 +1,15 @@
 <Window
     Title="Test window"
     Width="350" Height="525">
-    <Grid Rows="2" Columns="2">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50px"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.75"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         <Label Row="0" Column="0" Text="1"/>
         <Label Row="0" Column="1" Text="2"/>
         <Button Row="1" Column="0" ColumnSpan="1" Content="Button"/>

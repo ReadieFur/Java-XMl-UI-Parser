@@ -3,23 +3,21 @@ package xml_ui.xml_controls;
 import java.awt.Container;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-import java.awt.LayoutManager;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
+import xml_ui.Pair;
 import xml_ui.UIBuilder;
 import xml_ui.attributes.ChildBuilderAttribute;
 import xml_ui.attributes.CreatorAttribute;
-import xml_ui.attributes.SetterAttribute;
 
 public class Grid
 {
-    private static final String NOT_GRID_BAG_LAYOUT_MESSAGE = "The layout of the container is not a GridBagLayout.";
-
     private Grid(){}
 
     @CreatorAttribute
@@ -30,142 +28,226 @@ public class Grid
         return container;
     }
 
-    @SetterAttribute("Rows")
-    public static void SetRows(Container container, String rows)
-    {
-        LayoutManager layout = container.getLayout();
-        if (!(layout instanceof GridBagLayout))
-            throw new IllegalArgumentException(NOT_GRID_BAG_LAYOUT_MESSAGE);
-        GridBagLayout gridBagLayout = (GridBagLayout)layout;
-
-        //Returns a copy of the existing constraints.
-        GridBagConstraints constraints = gridBagLayout.getConstraints(container);
-
-        constraints.gridy = Integer.parseInt(rows);
-
-        gridBagLayout.setConstraints(container, constraints);
-    }
-
-    @SetterAttribute("Columns")
-    public static void SetColumns(Container container, String columns)
-    {
-        LayoutManager layout = container.getLayout();
-        if (!(layout instanceof GridBagLayout))
-            throw new IllegalArgumentException(NOT_GRID_BAG_LAYOUT_MESSAGE);
-        GridBagLayout gridBagLayout = (GridBagLayout)layout;
-
-        //Returns a copy of the existing constraints.
-        GridBagConstraints constraints = gridBagLayout.getConstraints(container);
-
-        constraints.gridx = Integer.parseInt(columns);
-
-        gridBagLayout.setConstraints(container, constraints);
-    }
-
-    @SetterAttribute("Width")
-    public static void SetWidth(Container container, String width)
-    {
-        LayoutManager layout = container.getLayout();
-        if (!(layout instanceof GridBagLayout))
-            throw new IllegalArgumentException(NOT_GRID_BAG_LAYOUT_MESSAGE);
-        GridBagLayout gridBagLayout = (GridBagLayout)layout;
-
-        //Returns a copy of the existing constraints.
-        GridBagConstraints constraints = gridBagLayout.getConstraints(container);
-
-        constraints.gridwidth = Integer.parseInt(width);
-
-        gridBagLayout.setConstraints(container, constraints);
-    }
-
-    @SetterAttribute("Height")
-    public static void SetHeight(Container container, String height)
-    {
-        LayoutManager layout = container.getLayout();
-        if (!(layout instanceof GridBagLayout))
-            throw new IllegalArgumentException(NOT_GRID_BAG_LAYOUT_MESSAGE);
-        GridBagLayout gridBagLayout = (GridBagLayout)layout;
-
-        //Returns a copy of the existing constraints.
-        GridBagConstraints constraints = gridBagLayout.getConstraints(container);
-
-        constraints.gridheight = Integer.parseInt(height);
-
-        gridBagLayout.setConstraints(container, constraints);
-    }
-
     @ChildBuilderAttribute
     public static void AddChildren(Container container, List<Node> children)
         throws ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, DOMException, SAXException
     {
-        LayoutManager layout = container.getLayout();
-        if (!(layout instanceof GridBagLayout))
-            throw new IllegalArgumentException(NOT_GRID_BAG_LAYOUT_MESSAGE);
-        GridBagLayout gridBagLayout = (GridBagLayout)layout;
-
-        GridBagConstraints baseConstraints = gridBagLayout.getConstraints(container);
+        //#region Get the grid property nodes and child nodes
+        List<Pair<Integer, Float>> rowDefinitions = new ArrayList<>();
+        List<Pair<Integer, Float>> columnDefinitions = new ArrayList<>();
+        List<Node> childrenToAdd = new ArrayList<>();
 
         for (Node child : children)
         {
-            GridBagConstraints constraints = new GridBagConstraints();
-            constraints.gridx = 0;
-            constraints.gridy = 0;
-            constraints.gridwidth = 1;
-            constraints.gridheight = 1;
+            if (child.getNodeName().equals("Grid.RowDefinitions"))
+            {
+                //I would normally make these one liners without braces but in this instance I have kept some to improve readability.
+                for (Node node : UIBuilder.GetElementNodes(child))
+                    rowDefinitions.add(GetWeightValue(node, "RowDefinition", "Height"));
+            }
+            else if (child.getNodeName().equals("Grid.ColumnDefinitions"))
+            {
+                for (Node columnDefinition : UIBuilder.GetElementNodes(child))
+                    columnDefinitions.add(GetWeightValue(columnDefinition, "ColumnDefinition", "Width"));
+            }
+            else
+            {
+                childrenToAdd.add(child);
+            }
+        }
+        //#endregion
 
-            //Get the desired constraints for the child.
+        //#region Correct the row and column definitions
+        //Values are passed by reference so this operation is fine.
+        CorrectAutoWeights(rowDefinitions);
+        CorrectAutoWeights(columnDefinitions);
+        //#endregion
+
+        //#region Add the children to the grid
+        for (Node child : childrenToAdd)
+        {
+            GridBagConstraints constraints = new GridBagConstraints();
+
+            //Get/set the desired constraints for the child.
             if (child.hasAttributes())
             {
-                Node rows = child.getAttributes().getNamedItem("Row");
-                if (rows != null)
+                Node rowAttribute = child.getAttributes().getNamedItem("Row");
+                if (rowAttribute != null)
                 {
-                    int row = Integer.parseInt(rows.getNodeValue());
+                    //Parse the row attribute and make sure it is in range.
+                    int row = Integer.parseInt(rowAttribute.getNodeValue());
                     if (row < 0)
-                        constraints.gridy = 0;
-                    else if (row > baseConstraints.gridy)
-                        constraints.gridy = baseConstraints.gridy;
-                    else
-                        constraints.gridy = row;
+                        row = 0;
+                    else if (row >= rowDefinitions.size())
+                        row = rowDefinitions.size() - 1;
+
+                    //Set the row.
+                    constraints.gridy = row;
+
+                    //Set the row weight.
+                    Pair<Integer, Float> rowWeight = rowDefinitions.get(row);
+                    switch (rowWeight.Item1)
+                    {
+                        case 1: //Pixels.
+                            constraints.ipady = rowWeight.Item2.intValue();
+                            break;
+                        case 2: //Percentage.
+                            constraints.weighty = rowWeight.Item2;
+                            break;
+                        default: //Shouldn't be reached.
+                            break;
+                    }
                 }
 
-                Node columns = child.getAttributes().getNamedItem("Column");
-                if (columns != null)
+                Node columnAttribute = child.getAttributes().getNamedItem("Column");
+                if (columnAttribute != null)
                 {
-                    int column = Integer.parseInt(columns.getNodeValue());
+                    //Parse the column attribute and make sure it is in range.
+                    int column = Integer.parseInt(columnAttribute.getNodeValue());
                     if (column < 0)
-                        constraints.gridx = 0;
-                    else if (column > baseConstraints.gridx)
-                        constraints.gridx = baseConstraints.gridx;
-                    else
-                        constraints.gridx = column;
+                        column = 0;
+                    else if (column >= columnDefinitions.size())
+                        column = columnDefinitions.size() - 1;
+
+                    //Set the column.
+                    constraints.gridx = column;
+
+                    //Set the column weight.
+                    Pair<Integer, Float> columnWeight = columnDefinitions.get(column);
+                    switch (columnWeight.Item1)
+                    {
+                        case 1: //Pixels.
+                            constraints.ipadx = columnWeight.Item2.intValue();
+                            break;
+                        case 2: //Percentage.
+                            constraints.weightx = columnWeight.Item2;
+                            break;
+                        default: //Shouldn't be reached.
+                            break;
+                    }
                 }
 
-                Node rowSpan = child.getAttributes().getNamedItem("RowSpan");
-                if (rowSpan != null)
+                Node rowSpanAttribute = child.getAttributes().getNamedItem("RowSpan");
+                if (rowSpanAttribute != null)
                 {
-                    int span = Integer.parseInt(rowSpan.getNodeValue()) + 1;
-                    if (span < 1)
-                        constraints.gridheight = 1;
-                    else if (span > baseConstraints.gridy)
-                        constraints.gridheight = baseConstraints.gridy;
-                    else
-                        constraints.gridheight = span;
+                    //Parse the row span attribute and make sure it is in range.
+                    int rowSpan = Integer.parseInt(rowSpanAttribute.getNodeValue()) + 1;
+                    if (rowSpan < 1)
+                        rowSpan = 1;
+                    else if (rowSpan > rowDefinitions.size())
+                        rowSpan = rowDefinitions.size();
+
+                    //Set the row span.
+                    constraints.gridheight = rowSpan;
                 }
 
-                Node columnSpan = child.getAttributes().getNamedItem("ColumnSpan");
-                if (columnSpan != null)
+                Node columnSpanAttribute = child.getAttributes().getNamedItem("ColumnSpan");
+                if (columnSpanAttribute != null)
                 {
-                    int span = Integer.parseInt(columnSpan.getNodeValue()) + 1;
-                    if (span < 1)
-                        constraints.gridwidth = 1;
-                    else if (span > baseConstraints.gridx)
-                        constraints.gridwidth = baseConstraints.gridx;
-                    else
-                        constraints.gridwidth = span;
+                    //Parse the column span attribute and make sure it is in range.
+                    int columnSpan = Integer.parseInt(columnSpanAttribute.getNodeValue()) + 1;
+                    if (columnSpan < 1)
+                        columnSpan = 1;
+                    else if (columnSpan > columnDefinitions.size())
+                        columnSpan = columnDefinitions.size();
+
+                    //Set the column span.
+                    constraints.gridwidth = columnSpan;
+                }
+
+                container.add(UIBuilder.ParseXMLNode(child), constraints);
+            }
+        }
+        //#endregion
+    }
+
+    /**
+     * Gets the weight value of a node.
+     * @return A pair containing the weight type and the weight value. The weight types are as follows:
+     * 0: No weight (aka auto).
+     * 1: Weight in pixels.
+     * 2: Weight as a percentage (0-1).
+     */
+    private static Pair<Integer, Float> GetWeightValue(Node node, String subNodeKey, String attributeName)
+    {
+        if (!node.getNodeName().equals(subNodeKey))
+            throw new IllegalArgumentException(subNodeKey + "s nodes must contain only " + subNodeKey + " nodes.");
+
+        if (node.getAttributes() == null || node.getAttributes().getNamedItem(attributeName) == null)
+        {
+            return new Pair<>(0, null);
+        }
+        else
+        {
+            String value = node.getAttributes().getNamedItem(attributeName).getNodeValue();
+            if (value == null)
+            {
+                return new Pair<>(0, null);
+            }
+            else if (value.endsWith("px"))
+            {
+                return new Pair<>(1, Float.parseFloat(value.substring(0, value.length() - 2)));
+            }
+            else
+            {
+                //If this fails to parse then an invalid value has been provided.
+                try
+                {
+                    return new Pair<>(2, Float.parseFloat(value));
+                }
+                catch (NumberFormatException e)
+                {
+                    throw new IllegalArgumentException("Invalid value for " + attributeName + " attribute.");
                 }
             }
+        }
+    }
 
-            container.add(UIBuilder.ParseXMLNode(child), constraints);
+    private static void CorrectAutoWeights(List<Pair<Integer, Float>> definitions)
+    {
+        //For the definitions that are not set (i.e. should be auto), we need to calculate their weight.
+        //Pixel set definitions are ignored.
+        int autoDefinitions = 0;
+        int percentageDefinitions = 0;
+        float autoWeight = 0;
+        for (Pair<Integer, Float> definition : definitions)
+        {
+            switch (definition.Item1)
+            {
+                case 1: //Pixels.
+                    break;
+                case 2: //Percentage.
+                    percentageDefinitions++;
+                    break;
+                default: //Auto.
+                    autoDefinitions++;
+                    break;
+            }
+        }
+
+        //If there were no auto definitions, then we can just return.
+        if (autoDefinitions == 0)
+            return;
+
+        if (percentageDefinitions == 0)
+        {
+            //If the number of percentage set definitions are 0, then we will do 1 / autoDefinitions.
+            autoWeight = 1f / autoDefinitions;
+        }
+        else
+        {
+            //If the number of percentage set definitions are not 0, then we will do 1 / (autoDefinitions + percentageDefinitions).
+            autoWeight = 1f / (autoDefinitions + percentageDefinitions);
+        }
+
+        //Update the auto definitions.
+        for (int i = 0; i < definitions.size(); i++)
+        {
+            Pair<Integer, Float> definition = definitions.get(i);
+            if (definition.Item1 == 0)
+            {
+                definitions.set(i, new Pair<>(2, autoWeight));
+            }
         }
     }
 }

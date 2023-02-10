@@ -42,6 +42,12 @@ public class Window
         frame.setSize(frame.getWidth(), Integer.parseInt(height));
     }
 
+    @SetterAttribute("Background")
+    public static void SetBackground(JFrame frame, String background)
+    {
+        frame.setBackground(UIBuilder.ParseColour(background));
+    }
+
     @ChildBuilderAttribute
     public static void AddChildren(JFrame frame, List<Node> children)
         throws SAXException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, DOMException
