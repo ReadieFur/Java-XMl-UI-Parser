@@ -1,0 +1,5 @@
+<Window
+    Title="Test window"
+    Width="350" Height="525">
+    <Button Content="Hello, World!"/>
+</Window>
