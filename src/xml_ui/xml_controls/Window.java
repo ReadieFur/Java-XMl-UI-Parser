@@ -1,6 +1,5 @@
 package xml_ui.xml_controls;
 
-import java.awt.Component;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -25,20 +24,6 @@ public class Window
         return new JFrame();
     }
 
-    @ChildBuilderAttribute
-    public static void AddChildren(JFrame frame, List<Node> children)
-        throws SAXException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, DOMException
-    {
-        //A window can only have one child.
-        if (children.size() > 1)
-            throw new SAXException("A window can only have one child.");
-        else if (children.isEmpty())
-            return;
-
-        //Add the child to the window.
-        frame.add(UIBuilder.ParseXMLNode(children.get(0)));
-    }
-
     @SetterAttribute("Title")
     public static void SetTitle(JFrame frame, String title)
     {
@@ -55,5 +40,19 @@ public class Window
     public static void SetHeight(JFrame frame, String height)
     {
         frame.setSize(frame.getWidth(), Integer.parseInt(height));
+    }
+
+    @ChildBuilderAttribute
+    public static void AddChildren(JFrame frame, List<Node> children)
+        throws SAXException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, DOMException
+    {
+        //A window can only have one child.
+        if (children.size() > 1)
+            throw new SAXException("A window can only have one child.");
+        else if (children.isEmpty())
+            return;
+
+        //Add the child to the window.
+        frame.add(UIBuilder.ParseXMLNode(children.get(0)));
     }
 }

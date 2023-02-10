@@ -96,7 +96,7 @@ public class UIBuilder
             }
             if (attributeSetter == null)
             {
-                //Warn of unknown attribute.
+                //Some child attributes are to be used by other controls, so we will ignore them.
                 continue;
             }
 
