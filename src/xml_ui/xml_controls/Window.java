@@ -45,7 +45,7 @@ public class Window
     @SetterAttribute("Background")
     public static void SetBackground(JFrame frame, String background)
     {
-        frame.setBackground(UIBuilder.ParseColour(background));
+        frame.getContentPane().setBackground(UIBuilder.ParseColour(background));
     }
 
     @ChildBuilderAttribute

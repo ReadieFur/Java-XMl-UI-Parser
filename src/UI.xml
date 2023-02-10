@@ -1,5 +1,5 @@
 <Window
-    Title="Test window"
+    Title="Test window" Background="#FF0000"
     Width="350" Height="525">
     <Grid>
         <Grid.RowDefinitions>
@@ -10,8 +10,8 @@
             <ColumnDefinition Width="0.75"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Label Row="0" Column="0" Text="1"/>
+        <Label Row="0" Column="0" Text="1" Background="#00FF00"/>
         <Label Row="0" Column="1" Text="2"/>
-        <Button Row="1" Column="0" ColumnSpan="1" Content="Button"/>
+        <Button Row="1" Column="0" ColumnSpan="1" Content="Button" Background="#0000FF" Foreground="#FFFFFF"/>
     </Grid>
 </Window>

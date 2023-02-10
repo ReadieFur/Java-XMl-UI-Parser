@@ -7,6 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JPanel;
+
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
@@ -15,6 +17,7 @@ import xml_ui.Pair;
 import xml_ui.UIBuilder;
 import xml_ui.attributes.ChildBuilderAttribute;
 import xml_ui.attributes.CreatorAttribute;
+import xml_ui.attributes.SetterAttribute;
 
 public class Grid
 {
@@ -23,13 +26,21 @@ public class Grid
     @CreatorAttribute
     public static Container Create()
     {
-        Container container = new Container();
-        container.setLayout(new GridBagLayout());
-        return container;
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridBagLayout());
+        panel.setOpaque(false);
+        return panel;
+    }
+
+    @SetterAttribute("Background")
+    public static void SetBackground(JPanel panel, String background)
+    {
+        panel.setOpaque(true);
+        panel.setBackground(UIBuilder.ParseColour(background));
     }
 
     @ChildBuilderAttribute
-    public static void AddChildren(Container container, List<Node> children)
+    public static void AddChildren(JPanel panel, List<Node> children)
         throws ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, DOMException, SAXException
     {
         //#region Get the grid property nodes and child nodes
@@ -155,7 +166,7 @@ public class Grid
                     constraints.gridwidth = columnSpan;
                 }
 
-                container.add(UIBuilder.ParseXMLNode(child), constraints);
+                panel.add(UIBuilder.ParseXMLNode(child), constraints);
             }
         }
         //#endregion
