@@ -35,7 +35,7 @@ public class UI extends XMLUI
     }
 
     @EventCallbackAttribute
-    private void ButtonClickEvent(List<Object> args)
+    private void Button_Click(List<Object> args)
     {
         System.out.println("Button clicked!");
     }

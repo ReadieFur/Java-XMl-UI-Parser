@@ -7,6 +7,8 @@ import org.xml.sax.SAXException;
 import xml_ui.attributes.BindingAttribute;
 import xml_ui.attributes.ChildBuilderAttribute;
 import xml_ui.attributes.CreatorAttribute;
+import xml_ui.attributes.EventAttribute;
+import xml_ui.attributes.EventCallbackAttribute;
 import xml_ui.attributes.SetterAttribute;
 
 import java.awt.Component;
@@ -16,6 +18,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class UIBuilder
 {
@@ -75,6 +78,25 @@ public class UIBuilder
             bindableMembers.put(field.getName(), (Observable<String>)field.get(context));
         }
 
+        //Get event callback methods from the context.
+        List<Method> eventCallbackMethods = new ArrayList<>();
+        for (Method method : context.getClass().getDeclaredMethods())
+        {
+            EventCallbackAttribute eventCallbackAttribute = method.getAnnotation(EventCallbackAttribute.class);
+            if (eventCallbackAttribute == null)
+                continue;
+
+            //Make sure that the method accepts (List<Object>) as the parameter.
+            if (method.getParameterCount() != 1
+                || method.getParameterTypes()[0] != List.class)
+                // || method.getParameterTypes()[0].getTypeParameters()[0].getGenericDeclaration() != Object.class)
+                throw new IllegalArgumentException(
+                    "Event callback methods must accept (List<Object>) as the parameters. (" + context.getClass().getSimpleName() + "::" + method.getName() + ")");
+
+            method.setAccessible(true);
+            eventCallbackMethods.add(method);
+        }
+
         //Get the class attribute setter methods.
         List<Method> attributeSetters = new ArrayList<>();
         for (Method method : controlType.getMethods())
@@ -93,7 +115,7 @@ public class UIBuilder
             attributeSetters.add(method);
         }
 
-        //For each attribute on the XML node, we will try to find a corresponding setter method on the control type.
+        //For each attribute on the XML node, we will try to find a corresponding class attribute on the control type.
         for (int i = 0; i < xmlNode.getAttributes().getLength(); i++)
         {
             //Get the XML attribute information.
@@ -107,6 +129,7 @@ public class UIBuilder
                 continue;
             }
 
+            //#region SetterAttribute
             //Try to find a setter method for the attribute.
             Method attributeSetter = null;
             for (Method method : attributeSetters)
@@ -119,53 +142,91 @@ public class UIBuilder
                     break;
                 }
             }
-            if (attributeSetter == null)
+            if (attributeSetter != null)
             {
-                //Some child attributes are to be used by other controls, so we will ignore them.
+                //Check if we should bind to a value or just set the value.
+                if (xmlAttribute.getNodeValue().startsWith("{Binding ") && xmlAttribute.getNodeValue().endsWith("}"))
+                {
+                    //Look for a bindable member within the context.
+                    String bindableMemberName = xmlAttribute.getNodeValue().substring(9, xmlAttribute.getNodeValue().length() - 1);
+                    Field bindableMember = null;
+                    for (Field field : context.getClass().getDeclaredFields())
+                    {
+                        if (field.getName().equals(bindableMemberName))
+                        {
+                            bindableMember = field;
+                            break;
+                        }
+                    }
+                    if (bindableMember == null)
+                        throw new SAXException(
+                            "No bindable member called '" + bindableMemberName + "' was found on the context '" + context.getClass().getSimpleName() + "'.");
+
+                    //This value won't be null as we will have obtained it earlier.
+                    Observable<String> bindableMemberValue = bindableMembers.get(bindableMemberName);
+
+                    //Invoke the setter with the initial value.
+                    attributeSetter.invoke(null, control, bindableMemberValue.Get());
+
+                    //Add a listener to the bindable member.
+                    final Method attributeSetterFinal = attributeSetter;
+                    bindableMemberValue.AddListener(value ->
+                    {
+                        try { attributeSetterFinal.invoke(null, control, value); }
+                        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+                        {
+                            //TODO: Handle this exception.
+                            e.printStackTrace();
+                        }
+                    });
+                }
+                else
+                {
+                    //Invoke the setter method.
+                    attributeSetter.invoke(null, control, xmlAttribute.getNodeValue());
+                }
+
                 continue;
             }
+            //#endregion
 
-            //Check if we should bind to a value or just set the value.
-            if (xmlAttribute.getNodeValue().startsWith("{Binding ") && xmlAttribute.getNodeValue().endsWith("}"))
+            //#region EventAttribute
+            //Try to find an event handler for the attribute.
+            Method eventHandler = null;
+            for (Method method : controlType.getMethods())
             {
-                //Look for a bindable member within the context.
-                String bindableMemberName = xmlAttribute.getNodeValue().substring(9, xmlAttribute.getNodeValue().length() - 1);
-                Field bindableMember = null;
-                for (Field field : context.getClass().getDeclaredFields())
+                EventAttribute eventAttribute = method.getAnnotation(EventAttribute.class);
+                if (eventAttribute == null)
+                    continue;
+
+                if (eventAttribute.value().equals(xmlAttributeName))
                 {
-                    if (field.getName().equals(bindableMemberName))
+                    eventHandler = method;
+                    break;
+                }
+            }
+            if (eventHandler != null)
+            {
+                //Find a matching event callback method.
+                for (Method method : eventCallbackMethods)
+                {
+                    if (method.getName().equals(xmlAttribute.getNodeValue()))
                     {
-                        bindableMember = field;
-                        break;
+                        //Wrap the callback method in a Consumer<List<Object>> to be passed to the eventHandler.
+                        Consumer<List<Object>> callback = (List<Object> args) ->
+                        {
+                            try { method.invoke(context, args); }
+                            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+                            {
+                                //TODO: Handle this exception.
+                                e.printStackTrace();
+                            }
+                        };
+                        eventHandler.invoke(null, control, callback);
                     }
                 }
-                if (bindableMember == null)
-                    throw new SAXException(
-                        "No bindable member called '" + bindableMemberName + "' was found on the context '" + context.getClass().getSimpleName() + "'.");
-
-                //This value won't be null as we will have obtained it earlier.
-                Observable<String> bindableMemberValue = bindableMembers.get(bindableMemberName);
-
-                //Invoke the setter with the initial value.
-                attributeSetter.invoke(null, control, bindableMemberValue.Get());
-
-                //Add a listener to the bindable member.
-                final Method attributeSetterFinal = attributeSetter;
-                bindableMemberValue.AddListener(value ->
-                {
-                    try { attributeSetterFinal.invoke(null, control, value); }
-                    catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-                    {
-                        //TODO: Handle this exception.
-                        e.printStackTrace();
-                    }
-                });
             }
-            else
-            {
-                //Invoke the setter method.
-                attributeSetter.invoke(null, control, xmlAttribute.getNodeValue());
-            }
+            //#endregion
         }
 
         //Parse the child nodes (if the control type has a child builder).

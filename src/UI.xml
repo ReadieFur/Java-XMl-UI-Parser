@@ -13,7 +13,7 @@
         <Label Grid.Row="0" Grid.Column="0" Text="1" Background="#00FF00" HorizontalAlignment="Stretch"/>
         <Label Grid.Row="0" Grid.Column="1" Text="2" Background="#FFFF00" HorizontalAlignment="Left" Margin="25,0,0,0"/>
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1">
-            <Button Content="Button 1" Background="#0000FF" Foreground="#FFFFFF"/>
+            <Button Content="Button 1" Background="#0000FF" Foreground="#FFFFFF" Click="Button_Click"/>
             <TextBox Value="Text" Enabled="true"/>
             <TextBlock Content="Hello, World!" IsReadOnly="true"/>
         </StackPanel>
