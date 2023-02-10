@@ -7,8 +7,6 @@ import java.awt.LayoutManager;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import javax.swing.JFrame;
-
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
