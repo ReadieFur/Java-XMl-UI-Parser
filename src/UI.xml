@@ -1,8 +1,10 @@
 <Window
     Title="Test window"
     Width="350" Height="525">
-    <Grid Columns="2">
-        <Button Content="Button 1"/>
-        <Button Column="1" Content="Button 2"/>
+    <Grid Rows="2" Columns="2">
+        <Label Row="0" Column="0" Text="1"/>
+        <Label Row="0" Column="1" Text="2"/>
+        <Button Row="1" Column="0" Content="Button 1"/>
+        <Button Row="1" Column="1" Content="Button 2"/>
     </Grid>
 </Window>
