@@ -66,9 +66,8 @@ public class Grid
                 childrenToAdd.add(child);
             }
         }
-        //#endregion
 
-        //#region Correct the row and column definitions
+        //Correct the row and column definitions
         //Values are passed by reference so this operation is fine.
         CorrectAutoWeights(rowDefinitions);
         CorrectAutoWeights(columnDefinitions);
@@ -221,37 +220,28 @@ public class Grid
         //For the definitions that are not set (i.e. should be auto), we need to calculate their weight.
         //Pixel set definitions are ignored.
         int autoDefinitions = 0;
-        int percentageDefinitions = 0;
-        float autoWeight = 0;
+        float percentageUsed = 0;
         for (Pair<Integer, Float> definition : definitions)
         {
             switch (definition.Item1)
             {
+                case 0: //Auto.
+                    autoDefinitions++;
+                    break;
                 case 1: //Pixels.
                     break;
                 case 2: //Percentage.
-                    percentageDefinitions++;
+                    percentageUsed += definition.Item2;
                     break;
-                default: //Auto.
-                    autoDefinitions++;
+                default: //Shouldn't be reached.
                     break;
             }
         }
 
-        //If there were no auto definitions, then we can just return.
         if (autoDefinitions == 0)
             return;
 
-        if (percentageDefinitions == 0)
-        {
-            //If the number of percentage set definitions are 0, then we will do 1 / autoDefinitions.
-            autoWeight = 1f / autoDefinitions;
-        }
-        else
-        {
-            //If the number of percentage set definitions are not 0, then we will do 1 / (autoDefinitions + percentageDefinitions).
-            autoWeight = 1f / (autoDefinitions + percentageDefinitions);
-        }
+        float autoWeight = (1 - percentageUsed) / autoDefinitions;
 
         //Update the auto definitions.
         for (int i = 0; i < definitions.size(); i++)
