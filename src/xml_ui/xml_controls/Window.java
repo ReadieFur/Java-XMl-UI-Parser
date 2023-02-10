@@ -11,6 +11,7 @@ import org.xml.sax.SAXException;
 
 import xml_ui.Helpers;
 import xml_ui.UIBuilder;
+import xml_ui.XMLUI;
 import xml_ui.attributes.ChildBuilderAttribute;
 import xml_ui.attributes.CreatorAttribute;
 import xml_ui.attributes.SetterAttribute;
@@ -50,7 +51,7 @@ public class Window
     }
 
     @ChildBuilderAttribute
-    public static void AddChildren(JFrame frame, List<Node> children)
+    public static void AddChildren(JFrame frame, List<Node> children, XMLUI context)
         throws SAXException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, DOMException
     {
         //A window can only have one child.
@@ -60,6 +61,6 @@ public class Window
             return;
 
         //Add the child to the window.
-        frame.add(UIBuilder.ParseXMLNode(children.get(0)));
+        frame.add(UIBuilder.ParseXMLNode(children.get(0), context));
     }
 }

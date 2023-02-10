@@ -1,5 +1,5 @@
 <Window
-    Title="Test window" Background="#FF0000"
+    Title="Test Window" Background="{Binding backgroundColour}"
     Width="350" Height="525">
     <Grid>
         <Grid.RowDefinitions>

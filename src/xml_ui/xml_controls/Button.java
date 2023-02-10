@@ -3,7 +3,6 @@ package xml_ui.xml_controls;
 import javax.swing.JButton;
 
 import xml_ui.Helpers;
-import xml_ui.UIBuilder;
 import xml_ui.attributes.CreatorAttribute;
 import xml_ui.attributes.SetterAttribute;
 

@@ -17,6 +17,7 @@ import org.xml.sax.SAXException;
 import xml_ui.Helpers;
 import xml_ui.Pair;
 import xml_ui.UIBuilder;
+import xml_ui.XMLUI;
 import xml_ui.attributes.ChildBuilderAttribute;
 import xml_ui.attributes.CreatorAttribute;
 import xml_ui.attributes.SetterAttribute;
@@ -42,7 +43,7 @@ public class Grid
     }
 
     @ChildBuilderAttribute
-    public static void AddChildren(JPanel panel, List<Node> children)
+    public static void AddChildren(JPanel panel, List<Node> children, XMLUI context)
         throws ClassNotFoundException, IllegalAccessException, InvocationTargetException, DOMException, SAXException
     {
         //#region Get the grid property nodes and child nodes
@@ -170,7 +171,7 @@ public class Grid
                     constraints.gridwidth = columnSpan;
                 }
 
-                panel.add(UIBuilder.ParseXMLNode(child), constraints);
+                panel.add(UIBuilder.ParseXMLNode(child, context), constraints);
             }
         }
         //#endregion

@@ -5,7 +5,10 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * Used to indicate the child builder for a control.
- * The method must be static and have two parameters: Control, List<Node>, where control is the element to add the children to and the list of child nodes.
+ * The method must be static and have three parameters: Control, List<Node>, XMLUI.
+ * P1 is the control to add the children to.
+ * P2 is the list of child nodes.
+ * P3 is the XMLUI context.
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ChildBuilderAttribute {}

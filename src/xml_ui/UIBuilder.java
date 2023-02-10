@@ -4,14 +4,17 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
+import xml_ui.attributes.BindingAttribute;
 import xml_ui.attributes.ChildBuilderAttribute;
 import xml_ui.attributes.CreatorAttribute;
 import xml_ui.attributes.SetterAttribute;
 
 import java.awt.Component;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class UIBuilder
@@ -21,8 +24,9 @@ public class UIBuilder
 
     private UIBuilder(){}
 
+    //TODO: Optimize this method.
     //This is the base method for parsing XML nodes. It will try to find a corresponding class to create a Component from.
-    public static Component ParseXMLNode(Node xmlNode)
+    public static Component ParseXMLNode(Node xmlNode, XMLUI context)
         throws ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, DOMException, SAXException
     {
         //Check if an element exists for the control type.
@@ -52,6 +56,24 @@ public class UIBuilder
 
         //Create the control.
         Component control = (Component)creatorMethod.invoke(null);
+
+        //Get the bindable members.
+        HashMap<String, Observable<String>> bindableMembers = new HashMap<>();
+        for (Field field : context.getClass().getDeclaredFields())
+        {
+            BindingAttribute bindingAttribute = field.getAnnotation(BindingAttribute.class);
+            if (bindingAttribute == null)
+                continue;
+
+            //Make sure that the field is an Observable.
+            if (field.getType() != Observable.class)
+                // || !field.getGenericType().getTypeName().equals(Observable.class.getCanonicalName() + "<" + String.class.getCanonicalName() + ">"))
+                throw new IllegalArgumentException(
+                    "Binding fields must be of type Observable<String>. (" + context.getClass().getSimpleName() + "::" + field.getName() + ")");
+
+            field.setAccessible(true);
+            bindableMembers.put(field.getName(), (Observable<String>)field.get(context));
+        }
 
         //Get the class attribute setter methods.
         List<Method> attributeSetters = new ArrayList<>();
@@ -103,8 +125,47 @@ public class UIBuilder
                 continue;
             }
 
-            //Invoke the setter method.
-            attributeSetter.invoke(null, control, xmlAttribute.getNodeValue());
+            //Check if we should bind to a value or just set the value.
+            if (xmlAttribute.getNodeValue().startsWith("{Binding ") && xmlAttribute.getNodeValue().endsWith("}"))
+            {
+                //Look for a bindable member within the context.
+                String bindableMemberName = xmlAttribute.getNodeValue().substring(9, xmlAttribute.getNodeValue().length() - 1);
+                Field bindableMember = null;
+                for (Field field : context.getClass().getDeclaredFields())
+                {
+                    if (field.getName().equals(bindableMemberName))
+                    {
+                        bindableMember = field;
+                        break;
+                    }
+                }
+                if (bindableMember == null)
+                    throw new SAXException(
+                        "No bindable member called '" + bindableMemberName + "' was found on the context '" + context.getClass().getSimpleName() + "'.");
+
+                //This value won't be null as we will have obtained it earlier.
+                Observable<String> bindableMemberValue = bindableMembers.get(bindableMemberName);
+
+                //Invoke the setter with the initial value.
+                attributeSetter.invoke(null, control, bindableMemberValue.Get());
+
+                //Add a listener to the bindable member.
+                final Method attributeSetterFinal = attributeSetter;
+                bindableMemberValue.AddListener(value ->
+                {
+                    try { attributeSetterFinal.invoke(null, control, value); }
+                    catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+                    {
+                        //TODO: Handle this exception.
+                        e.printStackTrace();
+                    }
+                });
+            }
+            else
+            {
+                //Invoke the setter method.
+                attributeSetter.invoke(null, control, xmlAttribute.getNodeValue());
+            }
         }
 
         //Parse the child nodes (if the control type has a child builder).
@@ -118,12 +179,12 @@ public class UIBuilder
                 if (method.getAnnotation(ChildBuilderAttribute.class) == null)
                     continue;
 
-                //Make sure that the method accepts one parameter: List<Node>.
-                if (method.getParameterCount() != 2
+                if (method.getParameterCount() != 3
                     || method.getParameterTypes()[0] != control.getClass()
-                    || method.getParameterTypes()[1] != List.class)
-                    // || method.getParameterTypes()[1].getTypeParameters()[0].getGenericDeclaration() != Node.class)
-                    throw new IllegalArgumentException("Child builder methods must accept (Control, List<Node>) as the parameters." +
+                    || method.getParameterTypes()[1] != List.class
+                    // || method.getParameterTypes()[1].getTypeParameters()[0].getGenericDeclaration() != Node.class
+                    || method.getParameterTypes()[2] != XMLUI.class)
+                    throw new IllegalArgumentException("Child builder methods must accept (Control, List<Node>, XMLUI) as the parameters." +
                         " (" + controlType.getSimpleName() + "::" + method.getName() + ")");
 
                 if (++childBuilderCount > 1)
@@ -136,7 +197,7 @@ public class UIBuilder
                 throw new SAXException("The control " + xmlNode.getNodeName() + " cannot have child nodes.");
 
             //Invoke the child builder method.
-            childBuilder.invoke(null, control, children);
+            childBuilder.invoke(null, control, children, context);
         }
 
         return control;

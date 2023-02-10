@@ -1,10 +1,15 @@
 import javax.swing.JFrame;
 
+import xml_ui.Observable;
 import xml_ui.XMLUI;
+import xml_ui.attributes.BindingAttribute;
 
 public class UI extends XMLUI
 {
     protected JFrame rootElement;
+
+    @BindingAttribute(DefaultValue = "#FF0000")
+    private Observable<String> backgroundColour;
 
     public UI() throws Exception
     {
@@ -17,5 +22,12 @@ public class UI extends XMLUI
     public void Show()
     {
         rootElement.setVisible(true);
+
+        new Thread(() ->
+        {
+            try { Thread.sleep(2500); }
+            catch (InterruptedException e) {}
+            backgroundColour.Set("#8400FF");
+        }).start();
     }
 }

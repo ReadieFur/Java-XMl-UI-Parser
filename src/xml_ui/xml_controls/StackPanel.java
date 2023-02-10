@@ -12,6 +12,7 @@ import org.xml.sax.SAXException;
 
 import xml_ui.Helpers;
 import xml_ui.UIBuilder;
+import xml_ui.XMLUI;
 import xml_ui.attributes.ChildBuilderAttribute;
 import xml_ui.attributes.CreatorAttribute;
 import xml_ui.attributes.SetterAttribute;
@@ -55,12 +56,12 @@ public class StackPanel
     }
 
     @ChildBuilderAttribute
-    public static void AddChildren(JPanel panel, List<Node> children)
+    public static void AddChildren(JPanel panel, List<Node> children, XMLUI context)
         throws ClassNotFoundException, IllegalAccessException, InvocationTargetException, DOMException, SAXException
     {
         for (Node child : children)
         {
-            panel.add(UIBuilder.ParseXMLNode(child));
+            panel.add(UIBuilder.ParseXMLNode(child, context));
         }
     }
 }
