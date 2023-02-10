@@ -82,7 +82,7 @@ public class Grid
             //Get/set the desired constraints for the child.
             if (child.hasAttributes())
             {
-                Node rowAttribute = child.getAttributes().getNamedItem("Row");
+                Node rowAttribute = child.getAttributes().getNamedItem("Grid.Row");
                 if (rowAttribute != null)
                 {
                     //Parse the row attribute and make sure it is in range.
@@ -110,7 +110,7 @@ public class Grid
                     }
                 }
 
-                Node columnAttribute = child.getAttributes().getNamedItem("Column");
+                Node columnAttribute = child.getAttributes().getNamedItem("Grid.Column");
                 if (columnAttribute != null)
                 {
                     //Parse the column attribute and make sure it is in range.
@@ -138,7 +138,7 @@ public class Grid
                     }
                 }
 
-                Node rowSpanAttribute = child.getAttributes().getNamedItem("RowSpan");
+                Node rowSpanAttribute = child.getAttributes().getNamedItem("Grid.RowSpan");
                 if (rowSpanAttribute != null)
                 {
                     //Parse the row span attribute and make sure it is in range.
@@ -152,7 +152,7 @@ public class Grid
                     constraints.gridheight = rowSpan;
                 }
 
-                Node columnSpanAttribute = child.getAttributes().getNamedItem("ColumnSpan");
+                Node columnSpanAttribute = child.getAttributes().getNamedItem("Grid.ColumnSpan");
                 if (columnSpanAttribute != null)
                 {
                     //Parse the column span attribute and make sure it is in range.
