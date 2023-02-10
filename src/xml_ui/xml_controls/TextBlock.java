@@ -2,6 +2,7 @@ package xml_ui.xml_controls;
 
 import javax.swing.JTextArea;
 
+import xml_ui.Helpers;
 import xml_ui.UIBuilder;
 import xml_ui.attributes.CreatorAttribute;
 import xml_ui.attributes.SetterAttribute;
@@ -19,13 +20,13 @@ public class TextBlock
     @SetterAttribute("Background")
     public static void SetBackground(JTextArea textBlock, String color)
     {
-        textBlock.setBackground(UIBuilder.ParseColour(color));
+        textBlock.setBackground(Helpers.ParseColour(color));
     }
 
     @SetterAttribute("Foreground")
     public static void SetForeground(JTextArea textBlock, String color)
     {
-        textBlock.setForeground(UIBuilder.ParseColour(color));
+        textBlock.setForeground(Helpers.ParseColour(color));
     }
 
     @SetterAttribute("Content")

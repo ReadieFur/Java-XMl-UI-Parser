@@ -2,6 +2,7 @@ package xml_ui.xml_controls;
 
 import javax.swing.JLabel;
 
+import xml_ui.Helpers;
 import xml_ui.UIBuilder;
 import xml_ui.attributes.CreatorAttribute;
 import xml_ui.attributes.SetterAttribute;
@@ -26,12 +27,12 @@ public class Label
     public static void SetBackground(JLabel label, String background)
     {
         label.setOpaque(true);
-        label.setBackground(UIBuilder.ParseColour(background));
+        label.setBackground(Helpers.ParseColour(background));
     }
 
     @SetterAttribute("Foreground")
     public static void SetForeground(JLabel label, String foreground)
     {
-        label.setForeground(UIBuilder.ParseColour(foreground));
+        label.setForeground(Helpers.ParseColour(foreground));
     }
 }

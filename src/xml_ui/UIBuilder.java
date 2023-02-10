@@ -9,7 +9,6 @@ import xml_ui.attributes.CreatorAttribute;
 import xml_ui.attributes.SetterAttribute;
 
 import java.awt.Component;
-import java.awt.Color;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -21,26 +20,6 @@ public class UIBuilder
         UIBuilder.class.getCanonicalName().length() - UIBuilder.class.getSimpleName().length() - 1) + ".xml_controls";
 
     private UIBuilder(){}
-
-    public static List<Node> GetElementNodes(Node node)
-    {
-        List<Node> elementNodes = new ArrayList<>();
-        for (int i = 0; i < node.getChildNodes().getLength(); i++)
-        {
-            Node childNode = node.getChildNodes().item(i);
-            if (childNode.getNodeType() == Node.ELEMENT_NODE)
-                elementNodes.add(childNode);
-        }
-        return elementNodes;
-    }
-
-    public static Color ParseColour(String colour)
-    {
-        if (colour.startsWith("#"))
-            return Color.decode(colour);
-        else
-            return Color.getColor(colour);
-    }
 
     //This is the base method for parsing XML nodes. It will try to find a corresponding class to create a Component from.
     public static Component ParseXMLNode(Node xmlNode)
@@ -129,7 +108,7 @@ public class UIBuilder
         }
 
         //Parse the child nodes (if the control type has a child builder).
-        List<Node> children = GetElementNodes(xmlNode);
+        List<Node> children = Helpers.GetElementNodes(xmlNode);
         if (!children.isEmpty())
         {
             Method childBuilder = null;

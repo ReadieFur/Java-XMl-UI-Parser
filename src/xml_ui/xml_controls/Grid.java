@@ -14,6 +14,7 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
+import xml_ui.Helpers;
 import xml_ui.Pair;
 import xml_ui.UIBuilder;
 import xml_ui.attributes.ChildBuilderAttribute;
@@ -37,7 +38,7 @@ public class Grid
     public static void SetBackground(JPanel panel, String background)
     {
         panel.setOpaque(true);
-        panel.setBackground(UIBuilder.ParseColour(background));
+        panel.setBackground(Helpers.ParseColour(background));
     }
 
     @ChildBuilderAttribute
@@ -54,12 +55,12 @@ public class Grid
             if (child.getNodeName().equals("Grid.RowDefinitions"))
             {
                 //I would normally make these one liners without braces but in this instance I have kept some to improve readability.
-                for (Node node : UIBuilder.GetElementNodes(child))
+                for (Node node : Helpers.GetElementNodes(child))
                     rowDefinitions.add(GetWeightValue(node, "RowDefinition", "Height"));
             }
             else if (child.getNodeName().equals("Grid.ColumnDefinitions"))
             {
-                for (Node columnDefinition : UIBuilder.GetElementNodes(child))
+                for (Node columnDefinition : Helpers.GetElementNodes(child))
                     columnDefinitions.add(GetWeightValue(columnDefinition, "ColumnDefinition", "Width"));
             }
             else

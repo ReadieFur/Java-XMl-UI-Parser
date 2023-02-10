@@ -10,6 +10,7 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
+import xml_ui.Helpers;
 import xml_ui.UIBuilder;
 import xml_ui.attributes.ChildBuilderAttribute;
 import xml_ui.attributes.CreatorAttribute;
@@ -50,7 +51,7 @@ public class StackPanel
     public static void SetBackground(JPanel panel, String background)
     {
         panel.setOpaque(true);
-        panel.setBackground(UIBuilder.ParseColour(background));
+        panel.setBackground(Helpers.ParseColour(background));
     }
 
     @ChildBuilderAttribute
