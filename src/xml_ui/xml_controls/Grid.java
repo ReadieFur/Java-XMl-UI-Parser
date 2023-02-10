@@ -3,7 +3,6 @@ package xml_ui.xml_controls;
 import java.awt.Container;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +42,7 @@ public class Grid
 
     @ChildBuilderAttribute
     public static void AddChildren(JPanel panel, List<Node> children)
-        throws ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, DOMException, SAXException
+        throws ClassNotFoundException, IllegalAccessException, InvocationTargetException, DOMException, SAXException
     {
         //#region Get the grid property nodes and child nodes
         List<Pair<Integer, Float>> rowDefinitions = new ArrayList<>();
@@ -182,11 +181,12 @@ public class Grid
      * 0: No weight (aka auto).
      * 1: Weight in pixels.
      * 2: Weight as a percentage (0-1).
+     * @throws SAXException
      */
-    private static Pair<Integer, Float> GetWeightValue(Node node, String subNodeKey, String attributeName)
+    private static Pair<Integer, Float> GetWeightValue(Node node, String subNodeKey, String attributeName) throws SAXException
     {
         if (!node.getNodeName().equals(subNodeKey))
-            throw new IllegalArgumentException(subNodeKey + "s nodes must contain only " + subNodeKey + " nodes.");
+            throw new SAXException(subNodeKey + "s nodes must contain only " + subNodeKey + " nodes.");
 
         if (node.getAttributes() == null || node.getAttributes().getNamedItem(attributeName) == null)
         {
@@ -212,7 +212,7 @@ public class Grid
                 }
                 catch (NumberFormatException e)
                 {
-                    throw new IllegalArgumentException("Invalid value for " + attributeName + " attribute.");
+                    throw new SAXException("Invalid value for " + attributeName + " attribute.");
                 }
             }
         }
@@ -257,7 +257,7 @@ public class Grid
         }
     }
 
-    private static void SetAlignment(GridBagConstraints constraints, Node node)
+    private static void SetAlignment(GridBagConstraints constraints, Node node) throws SAXException
     {
         if (!node.hasAttributes())
         {
@@ -285,7 +285,7 @@ public class Grid
                     verticalAlignment = GridBagConstraints.VERTICAL;
                     break;
                 default:
-                    throw new IllegalArgumentException("Invalid value for VerticalAlignment attribute.");
+                    throw new SAXException("Invalid value for VerticalAlignment attribute.");
             }
         }
 
@@ -309,7 +309,7 @@ public class Grid
                     horizontalAlignment = GridBagConstraints.HORIZONTAL;
                     break;
                 default:
-                    throw new IllegalArgumentException("Invalid value for HorizontalAlignment attribute.");
+                    throw new SAXException("Invalid value for HorizontalAlignment attribute.");
             }
         }
 
@@ -400,7 +400,7 @@ public class Grid
         }
     }
 
-    private static void SetMargin(GridBagConstraints constraints, Node node)
+    private static void SetMargin(GridBagConstraints constraints, Node node) throws SAXException
     {
         if (!node.hasAttributes())
         {
@@ -417,7 +417,7 @@ public class Grid
 
         String[] marginParts = marginAttribute.getNodeValue().split(",");
         if (marginParts.length != 4)
-            throw new IllegalArgumentException("Invalid margin string. Must be in the format 'top,left,bottom,right'.");
+            throw new SAXException("Invalid margin string. Must be in the format 'top,left,bottom,right'.");
 
         constraints.insets = new InsetsUIResource(
             Integer.parseInt(marginParts[0]),

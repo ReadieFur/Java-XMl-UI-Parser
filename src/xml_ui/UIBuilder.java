@@ -59,10 +59,12 @@ public class UIBuilder
 
             //Make sure that the method accepts no parameters.
             if (method.getParameterCount() != 0)
-                throw new IllegalArgumentException("Creator methods must accept no parameters. (" + controlType.getSimpleName() + ")");
+                throw new IllegalArgumentException(
+                    "Creator methods must accept no parameters. (" + controlType.getSimpleName() + "::" + method.getName() + ")");
 
             if (++creatorMethodCount > 1)
-                throw new IllegalArgumentException("Only one creator method is allowed per control type. (" + controlType.getSimpleName() + ")");
+                throw new IllegalArgumentException(
+                    "Only one creator method is allowed per control type. (" + controlType.getSimpleName() + "::" + method.getName() + ")");
 
             creatorMethod = method;
         }
@@ -84,7 +86,8 @@ public class UIBuilder
             if (method.getParameterCount() != 2
                 || method.getParameterTypes()[0] != control.getClass()
                 || method.getParameterTypes()[1] != String.class)
-                throw new IllegalArgumentException("Setter methods must accept (Component, String) as the parameters. (" + controlType.getSimpleName() + ")");
+                throw new IllegalArgumentException(
+                    "Setter methods must accept (Component, String) as the parameters. (" + controlType.getSimpleName() + "::" + method.getName() + ")");
 
             attributeSetters.add(method);
         }
@@ -141,10 +144,12 @@ public class UIBuilder
                     || method.getParameterTypes()[0] != control.getClass()
                     || method.getParameterTypes()[1] != List.class)
                     // || method.getParameterTypes()[1].getTypeParameters()[0].getGenericDeclaration() != Node.class)
-                    throw new IllegalArgumentException("Child builder methods must accept (Control, List<Node>) as the parameters.");
+                    throw new IllegalArgumentException("Child builder methods must accept (Control, List<Node>) as the parameters." +
+                        " (" + controlType.getSimpleName() + "::" + method.getName() + ")");
 
                 if (++childBuilderCount > 1)
-                    throw new IllegalArgumentException("Only one child builder method is allowed per control type.");
+                    throw new IllegalArgumentException(
+                        "Only one child builder method is allowed per control type. (" + controlType.getSimpleName() + ")");
 
                 childBuilder = method;
             }

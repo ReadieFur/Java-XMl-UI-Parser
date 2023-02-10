@@ -22,40 +22,10 @@ public class Button
         button.setText(text);
     }
 
-    @SetterAttribute("Width")
-    public static void SetWidth(JButton button, String width)
-    {
-        button.setSize(Integer.parseInt(width), button.getHeight());
-    }
-
-    @SetterAttribute("Height")
-    public static void SetHeight(JButton button, String height)
-    {
-        button.setSize(button.getWidth(), Integer.parseInt(height));
-    }
-
-    @SetterAttribute("X")
-    public static void SetX(JButton button, String x)
-    {
-        button.setLocation(Integer.parseInt(x), button.getY());
-    }
-
-    @SetterAttribute("Y")
-    public static void SetY(JButton button, String y)
-    {
-        button.setLocation(button.getX(), Integer.parseInt(y));
-    }
-
     @SetterAttribute("Enabled")
     public static void SetEnabled(JButton button, String enabled)
     {
         button.setEnabled(Boolean.parseBoolean(enabled));
-    }
-
-    @SetterAttribute("Visible")
-    public static void SetVisible(JButton button, String visible)
-    {
-        button.setVisible(Boolean.parseBoolean(visible));
     }
 
     @SetterAttribute("ToolTip")
