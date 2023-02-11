@@ -16,10 +16,10 @@ public class UI extends Window
         rootComponent.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    @Override
     public void Show()
     {
-        rootComponent.setVisible(true);
-
+        super.Show();
         new Thread(() ->
         {
             try { Thread.sleep(2500); }

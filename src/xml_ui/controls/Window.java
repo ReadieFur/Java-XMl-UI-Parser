@@ -69,5 +69,10 @@ public class Window extends XMLRootComponent<JFrame>
     {
         super();
     }
+
+    public void Show()
+    {
+        rootComponent.setVisible(true);
+    }
     //#endregion
 }
