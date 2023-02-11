@@ -1,13 +1,11 @@
-package xml_ui.xml_controls;
+package xml_ui.controls;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.Color;
 import java.util.function.Consumer;
 
 import javax.swing.JButton;
 
-import xml_ui.Helpers;
-import xml_ui.attributes.CreatorAttribute;
+import xml_ui.attributes.CreateComponentAttribute;
 import xml_ui.attributes.EventAttribute;
 import xml_ui.attributes.SetterAttribute;
 
@@ -15,7 +13,7 @@ public class Button
 {
     private Button(){}
 
-    @CreatorAttribute
+    @CreateComponentAttribute
     public static JButton Create()
     {
         return new JButton();
@@ -40,20 +38,20 @@ public class Button
     }
 
     @SetterAttribute("Background")
-    public static void SetBackground(JButton button, String background)
+    public static void SetBackground(JButton button, String colour)
     {
-        button.setBackground(Helpers.ParseColour(background));
+        button.setBackground(Color.decode(colour));
     }
 
     @SetterAttribute("Foreground")
-    public static void SetForeground(JButton button, String foreground)
+    public static void SetForeground(JButton button, String colour)
     {
-        button.setForeground(Helpers.ParseColour(foreground));
+        button.setForeground(Color.decode(colour));
     }
 
     @EventAttribute("Click")
-    public static void SetClick(JButton button, Consumer<List<Object>> callback)
+    public static void SetClick(JButton button, Consumer<Object[]> callback)
     {
-        button.addActionListener(e -> callback.accept(new ArrayList<>()));
+        button.addActionListener(e -> callback.accept(new Object[]{}));
     }
 }

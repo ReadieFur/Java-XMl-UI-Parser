@@ -1,32 +1,32 @@
-package xml_ui.xml_controls;
+package xml_ui.controls;
+
+import java.awt.Color;
 
 import javax.swing.JTextArea;
 
-import xml_ui.Helpers;
-import xml_ui.UIBuilder;
-import xml_ui.attributes.CreatorAttribute;
+import xml_ui.attributes.CreateComponentAttribute;
 import xml_ui.attributes.SetterAttribute;
 
 public class TextBlock
 {
     private TextBlock(){}
 
-    @CreatorAttribute
+    @CreateComponentAttribute
     public static JTextArea Create()
     {
         return new JTextArea();
     }
 
     @SetterAttribute("Background")
-    public static void SetBackground(JTextArea textBlock, String color)
+    public static void SetBackground(JTextArea textBlock, String colour)
     {
-        textBlock.setBackground(Helpers.ParseColour(color));
+        textBlock.setBackground(Color.decode(colour));
     }
 
     @SetterAttribute("Foreground")
-    public static void SetForeground(JTextArea textBlock, String color)
+    public static void SetForeground(JTextArea textBlock, String colour)
     {
-        textBlock.setForeground(Helpers.ParseColour(color));
+        textBlock.setForeground(Color.decode(colour));
     }
 
     @SetterAttribute("Content")

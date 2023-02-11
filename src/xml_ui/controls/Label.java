@@ -1,17 +1,17 @@
-package xml_ui.xml_controls;
+package xml_ui.controls;
+
+import java.awt.Color;
 
 import javax.swing.JLabel;
 
-import xml_ui.Helpers;
-import xml_ui.UIBuilder;
-import xml_ui.attributes.CreatorAttribute;
+import xml_ui.attributes.CreateComponentAttribute;
 import xml_ui.attributes.SetterAttribute;
 
 public class Label
 {
     private Label(){}
 
-    @CreatorAttribute
+    @CreateComponentAttribute
     public static JLabel Create()
     {
         return new JLabel();
@@ -24,15 +24,15 @@ public class Label
     }
 
     @SetterAttribute("Background")
-    public static void SetBackground(JLabel label, String background)
+    public static void SetBackground(JLabel label, String colour)
     {
         label.setOpaque(true);
-        label.setBackground(Helpers.ParseColour(background));
+        label.setBackground(Color.decode(colour));
     }
 
     @SetterAttribute("Foreground")
-    public static void SetForeground(JLabel label, String foreground)
+    public static void SetForeground(JLabel label, String colour)
     {
-        label.setForeground(Helpers.ParseColour(foreground));
+        label.setForeground(Color.decode(colour));
     }
 }

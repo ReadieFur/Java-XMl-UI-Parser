@@ -1,4 +1,5 @@
 <Window
+    xmlns="xml_ui.controls"
     Title="Test Window" Background="{Binding backgroundColour}"
     Width="350" Height="525">
     <Grid>

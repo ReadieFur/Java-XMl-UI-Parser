@@ -1,27 +1,24 @@
-package xml_ui.xml_controls;
+package xml_ui.controls;
 
-import java.lang.reflect.InvocationTargetException;
+import java.awt.Color;
 import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
-import xml_ui.Helpers;
-import xml_ui.UIBuilder;
-import xml_ui.XMLUI;
 import xml_ui.attributes.ChildBuilderAttribute;
-import xml_ui.attributes.CreatorAttribute;
+import xml_ui.attributes.CreateComponentAttribute;
 import xml_ui.attributes.SetterAttribute;
+import xml_ui.exceptions.InvalidXMLException;
+import xml_ui.factory.UIBuilderFactory;
 
 public class StackPanel
 {
     private StackPanel(){}
 
-    @CreatorAttribute
+    @CreateComponentAttribute
     public static JPanel Create()
     {
         JPanel panel = new JPanel();
@@ -31,7 +28,7 @@ public class StackPanel
     }
 
     @SetterAttribute("Orientation")
-    public static JPanel SetOrientation(JPanel panel, String orientation) throws SAXException
+    public static JPanel SetOrientation(JPanel panel, String orientation) throws InvalidXMLException
     {
         if (orientation.equals("Horizontal"))
         {
@@ -43,25 +40,22 @@ public class StackPanel
         }
         else
         {
-            throw new SAXException("Invalid orientation: " + orientation);
+            throw new InvalidXMLException("Invalid orientation: " + orientation);
         }
         return panel;
     }
 
     @SetterAttribute("Background")
-    public static void SetBackground(JPanel panel, String background)
+    public static void SetBackground(JPanel panel, String colour)
     {
         panel.setOpaque(true);
-        panel.setBackground(Helpers.ParseColour(background));
+        panel.setBackground(Color.decode(colour));
     }
 
     @ChildBuilderAttribute
-    public static void AddChildren(JPanel panel, List<Node> children, XMLUI context)
-        throws ClassNotFoundException, IllegalAccessException, InvocationTargetException, DOMException, SAXException
+    public static void AddChildren(UIBuilderFactory builder, JPanel panel, List<Node> children) throws InvalidXMLException
     {
         for (Node child : children)
-        {
-            panel.add(UIBuilder.ParseXMLNode(child, context));
-        }
+            panel.add(builder.ParseXMLNode(child));
     }
 }

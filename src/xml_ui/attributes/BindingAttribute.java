@@ -5,7 +5,11 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * Used to indicate a variable that should be bound to.
- * Must be attached to a {@link xml_ui.Observable} field.
+ * <br><br/>
+ * <b>Constraints:</b>
+ * <ul>
+ *  <li>Can only be attached to a {@link xml_ui.Observable}<{@link java.lang.String}> {@code field}.</li>
+ * </ul>
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BindingAttribute

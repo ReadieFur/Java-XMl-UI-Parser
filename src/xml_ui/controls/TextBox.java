@@ -1,32 +1,32 @@
-package xml_ui.xml_controls;
+package xml_ui.controls;
+
+import java.awt.Color;
 
 import javax.swing.JTextField;
 
-import xml_ui.Helpers;
-import xml_ui.UIBuilder;
-import xml_ui.attributes.CreatorAttribute;
+import xml_ui.attributes.CreateComponentAttribute;
 import xml_ui.attributes.SetterAttribute;
 
 public class TextBox
 {
     private TextBox(){}
 
-    @CreatorAttribute
+    @CreateComponentAttribute
     public static JTextField Create()
     {
         return new JTextField();
     }
 
     @SetterAttribute("Background")
-    public static void SetBackground(JTextField textBox, String color)
+    public static void SetBackground(JTextField textBox, String colour)
     {
-        textBox.setBackground(Helpers.ParseColour(color));
+        textBox.setBackground(Color.decode(colour));
     }
 
     @SetterAttribute("Foreground")
-    public static void SetForeground(JTextField textBox, String color)
+    public static void SetForeground(JTextField textBox, String colour)
     {
-        textBox.setForeground(Helpers.ParseColour(color));
+        textBox.setForeground(Color.decode(colour));
     }
 
     @SetterAttribute("Value")

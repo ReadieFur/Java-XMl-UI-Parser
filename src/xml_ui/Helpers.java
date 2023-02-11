@@ -1,10 +1,12 @@
 package xml_ui;
 
-import org.w3c.dom.Node;
-
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import org.w3c.dom.Node;
+
+import xml_ui.exceptions.InvalidXMLException;
 
 public class Helpers
 {
@@ -22,11 +24,32 @@ public class Helpers
         return elementNodes;
     }
 
-    public static Color ParseColour(String colour)
+    public static Class<?> GetClassForXMLComponent(Node xmlNode, Map<String, String> xmlNamespaces) throws InvalidXMLException
     {
-        if (colour.startsWith("#"))
-            return Color.decode(colour);
+        String[] rootComponentNameParts = xmlNode.getNodeName().split(":", 2);
+        String xmlComponentClassPath;
+        if (rootComponentNameParts.length == 2)
+        {
+            String namespaceKey = rootComponentNameParts[0];
+            String namespaceValue = xmlNamespaces.get(namespaceKey);
+            if (namespaceValue == null)
+                throw new InvalidXMLException("The namespace key '" + namespaceKey + "' is not defined.");
+
+            xmlComponentClassPath = namespaceValue + "." + rootComponentNameParts[1];
+        }
         else
-            return Color.getColor(colour);
+        {
+            String namespaceValue = xmlNamespaces.get("");
+            if (namespaceValue == null)
+                throw new InvalidXMLException("The default namespace is not defined.");
+
+            xmlComponentClassPath = namespaceValue + "." + rootComponentNameParts[0];
+        }
+
+        Class<?> xmlComponentClass;
+        try { xmlComponentClass = Class.forName(xmlComponentClassPath); }
+        catch (ClassNotFoundException e) { throw new InvalidXMLException("The root XML component '" + xmlComponentClassPath + "' does not exist."); }
+
+        return xmlComponentClass;
     }
 }

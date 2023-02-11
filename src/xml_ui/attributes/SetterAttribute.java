@@ -4,13 +4,26 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * The method must be static and accept two parameters: Component and String, where the first parameter is the control to set the property on and the second parameter is the value of the property.
+ * Indicates that the method is a setter method for a property.
+ * <br><br/>
+ * <b>Constraints:</b>
+ * <ul>
+ *  <li>Can only be attached to a {@code method}</li>
+ *  <li>Must be {@code public}</li>
+ *  <li>Must be {@code static}</li>
+ *  <li>Must take two parameters:
+ *  <ul>
+ *      <li>Component: {@link java.awt.Component}</li>
+ *      <li>Value: {@link java.lang.String}</li>
+ *  </ul>
+ *  </li>
+ * </ul>
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SetterAttribute
 {
     /**
-     * The name of the XML property to set.
+     * The name of the XML property.
      */
     String value();
 }
