@@ -3,12 +3,16 @@
     Title="ChatAppMockUI"
     Width="1080" Height="720"
     Background="{Binding backgroundColourPrimary}">
+    <Window.Resources>
+        <Resource Key="margin" Value="5,5,5,5"/>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
+            <!-- TODO: Binding for these values. (Currently resources work, binding does not). -->
             <ColumnDefinition/>
             <ColumnDefinition Width="0.7"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" Name="clientList" Background="{Binding backgroundColourSecondary}">
+        <StackPanel Grid.Column="0" Name="clientList" Background="{Binding backgroundColourSecondary}" Margin="{Resource margin}">
             <Grid Background="{Binding backgroundColourTertiary}">
                 <Label Content="Client" Foreground="{Binding foregroundColour}" HorizontalAlignment="Left"/>
                 <Label Content="IP" Foreground="{Binding foregroundColour}" HorizontalAlignment="Right"/>
@@ -17,7 +21,6 @@
         <Grid Grid.Column="1" Background="{Binding backgroundColourSecondary}">
             <Grid.RowDefinitions>
                 <RowDefinition/>
-                <!-- TODO: Binding for these values -->
                 <RowDefinition Height="10px"/>
             </Grid.RowDefinitions>
             <TextBlock Name="chatBox" Grid.Row="0" Background="{Binding backgroundColourTertiary}" IsReadOnly="true"/>

@@ -39,7 +39,7 @@ public class Grid
         panel.setBackground(Color.decode(colour));
     }
 
-    //TODO: XML binding for grid layout.
+    //TODO: XML binding for grid layout. (Currently resources work, binding does not).
     @ChildBuilderAttribute
     public static void AddChildren(UIBuilderFactory builder, JPanel panel, List<Node> children) throws InvalidXMLException
     {
@@ -50,16 +50,24 @@ public class Grid
 
         for (Node child : children)
         {
+            builder.ReplaceResourceReferences(child);
+
             if (child.getNodeName().equals("Grid.RowDefinitions"))
             {
                 //I would normally make these one liners without braces but in this instance I have kept some to improve readability.
-                for (Node node : Helpers.GetElementNodes(child))
-                    rowDefinitions.add(GetWeightValue(node, "RowDefinition", "Height"));
+                for (Node rowDefinition : Helpers.GetElementNodes(child))
+                {
+                    builder.ReplaceResourceReferences(rowDefinition);
+                    rowDefinitions.add(GetWeightValue(rowDefinition, "RowDefinition", "Height"));
+                }
             }
             else if (child.getNodeName().equals("Grid.ColumnDefinitions"))
             {
                 for (Node columnDefinition : Helpers.GetElementNodes(child))
+                {
+                    builder.ReplaceResourceReferences(columnDefinition);
                     columnDefinitions.add(GetWeightValue(columnDefinition, "ColumnDefinition", "Width"));
+                }
             }
             else
             {
@@ -196,31 +204,27 @@ public class Grid
             throw new InvalidXMLException(subNodeKey + "s nodes must contain only " + subNodeKey + " nodes.");
 
         if (node.getAttributes() == null || node.getAttributes().getNamedItem(attributeName) == null)
+            return new Pair<>(0, null);
+
+        String value = node.getAttributes().getNamedItem(attributeName).getNodeValue();
+        if (value == null)
         {
             return new Pair<>(0, null);
         }
+        else if (value.endsWith("px"))
+        {
+            return new Pair<>(1, Float.parseFloat(value.substring(0, value.length() - 2)));
+        }
         else
         {
-            String value = node.getAttributes().getNamedItem(attributeName).getNodeValue();
-            if (value == null)
+            //If this fails to parse then an invalid value has been provided.
+            try
             {
-                return new Pair<>(0, null);
+                return new Pair<>(2, Float.parseFloat(value));
             }
-            else if (value.endsWith("px"))
+            catch (NumberFormatException e)
             {
-                return new Pair<>(1, Float.parseFloat(value.substring(0, value.length() - 2)));
-            }
-            else
-            {
-                //If this fails to parse then an invalid value has been provided.
-                try
-                {
-                    return new Pair<>(2, Float.parseFloat(value));
-                }
-                catch (NumberFormatException e)
-                {
-                    throw new InvalidXMLException("Invalid value for " + attributeName + " attribute.");
-                }
+                throw new InvalidXMLException("Invalid value for " + attributeName + " attribute.");
             }
         }
     }

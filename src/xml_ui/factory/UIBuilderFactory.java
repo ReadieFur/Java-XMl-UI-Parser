@@ -1,7 +1,6 @@
 package xml_ui.factory;
 
 import java.awt.Component;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +27,10 @@ public class UIBuilderFactory
      * Value: Java package name.
      */
     private final Map<String, String> xmlNamespaces;
+    /**
+     * A map of XML resources and their constant values.
+     */
+    private final Map<String, String> resources;
     /**
      * A map of XML binding names to their corresponding {@link Observable} values.
      * Key: XML property name.
@@ -57,10 +60,12 @@ public class UIBuilderFactory
     public UIBuilderFactory(
         //Leave these up to the caller to provide.
         Map<String, String> xmlNamespaces,
+        Map<String, String> resources,
         Map<String, Observable<String>> bindableMembers,
         Map<String, Consumer<Object[]>> eventCallbacks)
     {
         this.xmlNamespaces = xmlNamespaces;
+        this.resources = resources;
         this.bindableMembers = bindableMembers;
         this.eventCallbacks = eventCallbacks;
         this.namedComponents = new HashMap<>();
@@ -116,6 +121,7 @@ public class UIBuilderFactory
         Component component = componentWrapper.CreateComponent();
 
         //Parse the attributes.
+        ReplaceResourceReferences(xmlNode);
         if (xmlNode.hasAttributes())
         {
             Set<String> setterNames = componentWrapper.GetSetterNames();
@@ -179,5 +185,31 @@ public class UIBuilderFactory
             componentWrapper.ParseChildTree(this, component, childElementNodes);
 
         return component;
+    }
+
+    /**
+     * Replaces all resource references in the XML node and all of it's children.
+     * @param xmlNode The XML node to replace the resource references in.
+     */
+    //I ideally wouldn't want to do this as it would mean looping over properties twice but I need it for child preprocessing.
+    //This method is also "destructive" in that it changes the XML node's attributes which I don't like but it's also not a problem.
+    public void ReplaceResourceReferences(Node xmlNode)
+    {
+        if (!xmlNode.hasAttributes())
+            return;
+
+        for (int i = 0; i < xmlNode.getAttributes().getLength(); i++)
+        {
+            Node attribute = xmlNode.getAttributes().item(i);
+            String attributeValue = attribute.getNodeValue();
+
+            //If the attribute is a resource, replace it with the resource value.
+            if (!(attributeValue.startsWith("{Resource ") && attributeValue.endsWith("}")))
+                continue;
+
+            String resourceName = attributeValue.substring(10, attributeValue.length() - 1);
+            if (resources.containsKey(resourceName))
+                attribute.setNodeValue(resources.get(resourceName));
+        }
     }
 }

@@ -17,6 +17,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import xml_ui.attributes.BindingAttribute;
@@ -33,6 +34,7 @@ public class XMLRootComponent<TRootComponent extends Component>
     protected XMLRootComponent() throws IOException, ParserConfigurationException, SAXException, InvalidXMLException, IllegalArgumentException, IllegalAccessException
     {
         Map<String, String> xmlNamespaces = new HashMap<>();
+        Map<String, String> resources = new HashMap<>();
         Map<String, Observable<String>> bindableMembers = new HashMap<>();
         Map<String, Consumer<Object[]>> eventCallbacks = new HashMap<>();
 
@@ -86,6 +88,48 @@ public class XMLRootComponent<TRootComponent extends Component>
                     throw new InvalidXMLException("The namespace '" + namespaceName + "' is defined more than once.");
                 xmlNamespaces.put(namespaceName, namespaceValue);
             }
+        }
+        //#endregion
+
+        //#region Verify that the root XML component can be used as a root component
+        Class<?> xmlComponentClass = Helpers.GetClassForXMLComponent(xmlRootElement, xmlNamespaces);
+        if (!XMLRootComponent.class.isAssignableFrom(xmlComponentClass))
+            throw new InvalidXMLException("The root XML component '" + xmlComponentClass.getCanonicalName() + "' cannot be used as a root component.");
+        //#endregion
+
+        //#region Get the resources
+        for (Node node : Helpers.GetElementNodes(xmlRootElement))
+        {
+            if (!node.getNodeName().equals(xmlRootElement.getNodeName() + ".Resources"))
+                continue;
+
+            for (Node resourceNode : Helpers.GetElementNodes(node))
+            {
+                if (!resourceNode.getNodeName().equals("Resource"))
+                    throw new InvalidXMLException("The Resources group can only contain 'Resource' elements.");
+
+                if (!resourceNode.hasAttributes())
+                    throw new InvalidXMLException("The Resource element does not have any attributes.");
+
+                if (resourceNode.hasChildNodes())
+                    throw new InvalidXMLException("The Resource element cannot have any child nodes.");
+
+                Node resourceKey = resourceNode.getAttributes().getNamedItem("Key");
+                Node resourceValue = resourceNode.getAttributes().getNamedItem("Value");
+
+                if (resourceKey == null || resourceKey.getNodeValue() == null
+                    || resourceValue == null || resourceValue.getNodeValue() == null)
+                    throw new InvalidXMLException("The Resource element must have a 'Key' and 'Value' attribute.");
+
+                String resourceKeyString = resourceKey.getNodeValue();
+                String resourceValueString = resourceValue.getNodeValue();
+
+                if (resources.containsKey(resourceKeyString))
+                    throw new InvalidXMLException("The resource '" + resourceKeyString + "' is defined more than once.");
+                resources.put(resourceKeyString, resourceValueString);
+            }
+
+            break;
         }
         //#endregion
 
@@ -153,14 +197,8 @@ public class XMLRootComponent<TRootComponent extends Component>
         }
         //#endregion
 
-        //#region Verify that the root XML component can be used as a root component
-        Class<?> xmlComponentClass = Helpers.GetClassForXMLComponent(xmlRootElement, xmlNamespaces);
-        if (!XMLRootComponent.class.isAssignableFrom(xmlComponentClass))
-            throw new InvalidXMLException("The root XML component '" + xmlComponentClass.getCanonicalName() + "' cannot be used as a root component.");
-        //#endregion
-
         //Begin building the UI component tree.
-        UIBuilderFactory uiBuilderFactory = new UIBuilderFactory(xmlNamespaces, bindableMembers, eventCallbacks);
+        UIBuilderFactory uiBuilderFactory = new UIBuilderFactory(xmlNamespaces, resources, bindableMembers, eventCallbacks);
         uiBuilderFactory.SetDoRootComponentCheckForNextCall(false);
         rootComponent = (TRootComponent)uiBuilderFactory.ParseXMLNode(xmlRootElement);
         namedComponents = uiBuilderFactory.GetNamedComponents();

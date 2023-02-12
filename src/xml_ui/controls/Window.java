@@ -53,14 +53,21 @@ public class Window extends XMLRootComponent<JFrame>
     @ChildBuilderAttribute
     public static void AddChild(UIBuilderFactory builder, JFrame frame, List<Node> children) throws InvalidXMLException
     {
-        //A window can only have one child.
-        if (children.size() > 1)
-            throw new InvalidXMLException("A window can only have one child.");
-        else if (children.isEmpty())
-            return;
+        Boolean addedChild = false;
+        for (Node child : children)
+        {
+            //A window can only have one child.
+            if (addedChild)
+                throw new InvalidXMLException("A window can only have one child.");
 
-        //Add the child to the window.
-        frame.add(builder.ParseXMLNode(children.get(0)));
+            //If the child is a resource dictionary, skip it.
+            if (child.getNodeName().equals(Window.class.getSimpleName() + ".Resources"))
+                continue;
+
+            //Add the child to the window.
+            frame.add(builder.ParseXMLNode(child));
+            addedChild = true;
+        }
     }
     //#endregion
 
