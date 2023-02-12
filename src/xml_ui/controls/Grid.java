@@ -39,6 +39,7 @@ public class Grid
         panel.setBackground(Color.decode(colour));
     }
 
+    //TODO: XML binding for grid layout.
     @ChildBuilderAttribute
     public static void AddChildren(UIBuilderFactory builder, JPanel panel, List<Node> children) throws InvalidXMLException
     {
@@ -84,7 +85,7 @@ public class Grid
             if (child.hasAttributes())
             {
                 Node rowAttribute = child.getAttributes().getNamedItem("Grid.Row");
-                if (rowAttribute != null)
+                if (rowAttribute != null && !rowDefinitions.isEmpty())
                 {
                     //Parse the row attribute and make sure it is in range.
                     int row = Integer.parseInt(rowAttribute.getNodeValue());
@@ -110,15 +111,20 @@ public class Grid
                             break;
                     }
                 }
+                else
+                {
+                    //If no value is specified, use the default settings which is "Stretch".
+                    constraints.weighty = 1;
+                }
 
                 Node columnAttribute = child.getAttributes().getNamedItem("Grid.Column");
-                if (columnAttribute != null)
+                if (columnAttribute != null && !columnDefinitions.isEmpty())
                 {
                     //Parse the column attribute and make sure it is in range.
                     int column = Integer.parseInt(columnAttribute.getNodeValue());
                     if (column < 0)
                         column = 0;
-                    else if (column >= columnDefinitions.size())
+                    if (column >= columnDefinitions.size())
                         column = columnDefinitions.size() - 1;
 
                     //Set the column.
@@ -137,6 +143,10 @@ public class Grid
                         default: //Shouldn't be reached.
                             break;
                     }
+                }
+                else
+                {
+                    constraints.weightx = 1;
                 }
 
                 Node rowSpanAttribute = child.getAttributes().getNamedItem("Grid.RowSpan");
@@ -259,11 +269,12 @@ public class Grid
         if (!node.hasAttributes())
         {
             constraints.anchor = GridBagConstraints.CENTER;
-            constraints.fill = GridBagConstraints.NONE;
+            constraints.fill = GridBagConstraints.BOTH;
+            return;
         }
 
         //Get the vertical alignment.
-        int verticalAlignment = GridBagConstraints.CENTER;
+        int verticalAlignment = GridBagConstraints.VERTICAL;
         Node verticalAlignmentAttribute = node.getAttributes().getNamedItem("VerticalAlignment");
         if (verticalAlignmentAttribute != null)
         {
@@ -287,7 +298,7 @@ public class Grid
         }
 
         //Get the horizontal alignment.
-        int horizontalAlignment = GridBagConstraints.CENTER;
+        int horizontalAlignment = GridBagConstraints.HORIZONTAL;
         Node horizontalAlignmentAttribute = node.getAttributes().getNamedItem("HorizontalAlignment");
         if (horizontalAlignmentAttribute != null)
         {

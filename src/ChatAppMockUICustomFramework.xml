@@ -1,0 +1,34 @@
+<Window
+    xmlns="xml_ui.controls"
+    Title="ChatAppMockUI"
+    Width="1080" Height="720"
+    Background="{Binding backgroundColourPrimary}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0.7"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Name="clientList" Background="{Binding backgroundColourSecondary}">
+            <Grid Background="{Binding backgroundColourTertiary}">
+                <Label Content="Client" Foreground="{Binding foregroundColour}" HorizontalAlignment="Left"/>
+                <Label Content="IP" Foreground="{Binding foregroundColour}" HorizontalAlignment="Right"/>
+            </Grid>
+        </StackPanel>
+        <Grid Grid.Column="1" Background="{Binding backgroundColourSecondary}">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <!-- TODO: Binding for these values -->
+                <RowDefinition Height="10px"/>
+            </Grid.RowDefinitions>
+            <TextBlock Name="chatBox" Grid.Row="0" Background="{Binding backgroundColourTertiary}" IsReadOnly="true"/>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="5px"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Name="inputBox" Grid.Column="0" Background="{Binding backgroundColourTertiary}"/>
+                <Button Name="sendButton" Grid.Column="1" Content="Send" Background="{Binding backgroundColourTertiary}" Foreground="{Binding foregroundColour}"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

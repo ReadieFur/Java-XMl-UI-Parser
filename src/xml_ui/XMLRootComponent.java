@@ -166,15 +166,28 @@ public class XMLRootComponent<TRootComponent extends Component>
         namedComponents = uiBuilderFactory.GetNamedComponents();
     }
 
-    protected <T extends Component> T GetNamedComponent(String componentName)
+    protected <T extends Component> T GetNamedComponent(String componentName, Class<T> componentClass)
     {
         return (T)namedComponents.get(componentName);
+    }
+
+    protected Component GetNamedComponent(String componentName)
+    {
+        return GetNamedComponent(componentName, Component.class);
+    }
+
+    /**
+     * Shorthand for {@link #GetNamedComponent(String, Class)}.
+     */
+    protected <T extends Component> T Get(String componentName, Class<T> componentClass)
+    {
+        return GetNamedComponent(componentName, componentClass);
     }
 
     /**
      * Shorthand for {@link #GetNamedComponent(String)}.
      */
-    protected <T extends Component> T Get(String componentName)
+    protected Component Get(String componentName)
     {
         return GetNamedComponent(componentName);
     }

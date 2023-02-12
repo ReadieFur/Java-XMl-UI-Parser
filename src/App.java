@@ -5,7 +5,8 @@ public class App
     public static void main(String[] args)
     {
         // Test();
-        CustomFramework();
+        // CustomFramework();
+        TestUI();
     }
 
     private static void Test()
@@ -25,6 +26,20 @@ public class App
         {
             UI ui = new UI();
             ui.Show();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    private static void TestUI()
+    {
+        try
+        {
+            ChatAppMockUICustomFramework frameworkUI = new ChatAppMockUICustomFramework();
+            frameworkUI.Show();
+            // new ChatAppMockUI();
         }
         catch (Exception ex)
         {
