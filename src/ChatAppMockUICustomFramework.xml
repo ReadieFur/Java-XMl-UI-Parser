@@ -4,7 +4,8 @@
     Width="1080" Height="720"
     Background="{Binding backgroundColourPrimary}">
     <Window.Resources>
-        <Resource Key="clientEntryTextMargin" Value="5,5,5,5"/>
+        <Resource Key="clientEntryTextMargin" Value="4,4,4,4"/>
+        <Resource Key="chatBoxEntryMargin" Value="0,0,2,0"/>
     </Window.Resources>
     <!-- TODO: *.Styles (styles entry to apply to types) -->
     <Grid>
@@ -15,34 +16,43 @@
         </Grid.ColumnDefinitions>
 
         <!-- #region Clients list -->
-        <StackPanel Grid.Column="0" Name="clientList" Background="{Binding backgroundColourSecondary}" Margin="5,5,5,0">
+        <Scrollable Grid.Column="0" Margin="4,4,4,2">
+            <StackPanel Name="clientList" Background="{Binding backgroundColourSecondary}">
 
-            <!-- #region Client entry -->
-            <Grid Background="{Binding backgroundColourTertiary}" VerticalAlignment="Center" Margin="5,5,0,5">
-                <Label Text="Client" Foreground="{Binding foregroundColour}" HorizontalAlignment="Left" Margin="{Resource clientEntryTextMargin}"/>
-                <Label Text="IP" Foreground="{Binding foregroundColour}" HorizontalAlignment="Right" Margin="{Resource clientEntryTextMargin}"/>
-            </Grid>
-            <!-- #endregion -->
+                <!-- #region Client entry -->
+                <Grid Background="{Binding backgroundColourTertiary}" VerticalAlignment="Center" Margin="4,4,2,4">
+                    <Label Text="Client" Foreground="{Binding foregroundColour}" HorizontalAlignment="Left" Margin="{Resource clientEntryTextMargin}"/>
+                    <Label Text="IP" Foreground="{Binding foregroundColour}" HorizontalAlignment="Right" Margin="{Resource clientEntryTextMargin}"/>
+                </Grid>
+                <!-- #endregion -->
 
-        </StackPanel>
+            </StackPanel>
+        </Scrollable>
         <!-- #endregion -->
 
         <!-- #region Chat area -->
-        <Grid Grid.Column="1" Background="{Binding backgroundColourSecondary}" Margin="5,5,5,5">
+        <Grid Grid.Column="1" Background="{Binding backgroundColourSecondary}" Margin="4,4,4,4">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="10px"/>
             </Grid.RowDefinitions>
 
             <!-- #region Chat box -->
-            <TextBlock Name="chatBox" Grid.Row="0" Background="{Binding backgroundColourTertiary}" IsReadOnly="true"/>
+            <Scrollable Grid.Row="0" Margin="4,4,2,4">
+                <StackPanel Background="{Binding backgroundColourTertiary}">
+                    <TextBlock Background="{Binding backgroundColourTertiary}" IsReadOnly="true" Margin="{Resource chatBoxEntryMargin}" Content="[Client 1] Hello, World!"/>
+                </StackPanel>
+                <!-- I am not using a text block for the messages because consistently having text appear at the bottom of the page would be a struggle.
+                Instead I will use a stack panel that is bottom aligned, the downside to this is that the nested TextBlocks cannot be multi-selected. -->
+                <!-- <TextBlock Name="chatBox" Background="{Binding backgroundColourTertiary}" IsReadOnly="true" Content="Hello, World 1!\nHello, World 2!"/> -->
+            </Scrollable>
             <!-- #endregion -->
 
             <!-- #region Input box -->
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" Margin="4,4,4,4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
-                    <ColumnDefinition Width="5px"/>
+                    <ColumnDefinition Width="4px"/>
                 </Grid.ColumnDefinitions>
                 <TextBox Name="inputBox" Grid.Column="0" Background="{Binding backgroundColourTertiary}"/>
                 <Button Name="sendButton" Grid.Column="1" Content="Send" Background="{Binding backgroundColourTertiary}" Foreground="{Binding foregroundColour}" Click="SendButton_OnClick"/>

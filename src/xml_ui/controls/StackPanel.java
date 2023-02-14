@@ -6,7 +6,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -62,6 +61,8 @@ public class StackPanel
         for (int i = 0; i < children.size(); i++)
         {
             final Node child = children.get(i);
+
+            builder.ReplaceResourceReferences(child);
 
             //Build constraints for the child.
             GridBagConstraints constraints = GetConstraintsForOrientation(orientation, i);

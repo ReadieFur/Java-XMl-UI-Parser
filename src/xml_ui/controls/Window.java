@@ -58,7 +58,7 @@ public class Window extends XMLRootComponent<JFrame>
         {
             //A window can only have one child.
             if (addedChild)
-                throw new InvalidXMLException("A window can only have one child.");
+                throw new InvalidXMLException("A '" + Window.class.getSimpleName() + "' can only have one child.");
 
             //If the child is a resource dictionary, skip it.
             if (child.getNodeName().equals(Window.class.getSimpleName() + ".Resources"))

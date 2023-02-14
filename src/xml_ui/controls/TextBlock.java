@@ -32,6 +32,8 @@ public class TextBlock
     @SetterAttribute("Content")
     public static void SetContent(JTextArea textBlock, String value)
     {
+        //Replace all newline breaks with new lines.
+        value = value.replace("\\n", "\n");
         textBlock.setText(value);
     }
 
