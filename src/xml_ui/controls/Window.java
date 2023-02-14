@@ -51,6 +51,36 @@ public class Window extends XMLRootComponent<JFrame>
         frame.setSize(frame.getWidth(), Integer.parseInt(height));
     }
 
+    @SetterAttribute("MinWidth")
+    public static void SetMinWidth(JFrame frame, String minWidth)
+    {
+        frame.setMinimumSize(new java.awt.Dimension(Integer.parseInt(minWidth), frame.getMinimumSize().height));
+    }
+
+    @SetterAttribute("MinHeight")
+    public static void SetMinHeight(JFrame frame, String minHeight)
+    {
+        frame.setMinimumSize(new java.awt.Dimension(frame.getMinimumSize().width, Integer.parseInt(minHeight)));
+    }
+
+    @SetterAttribute("MaxWidth")
+    public static void SetMaxWidth(JFrame frame, String maxWidth)
+    {
+        frame.setMaximumSize(new java.awt.Dimension(Integer.parseInt(maxWidth), frame.getMaximumSize().height));
+    }
+
+    @SetterAttribute("MaxHeight")
+    public static void SetMaxHeight(JFrame frame, String maxHeight)
+    {
+        frame.setMaximumSize(new java.awt.Dimension(frame.getMaximumSize().width, Integer.parseInt(maxHeight)));
+    }
+
+    @SetterAttribute("Resizable")
+    public static void SetResizable(JFrame frame, String resizable)
+    {
+        frame.setResizable(Boolean.parseBoolean(resizable));
+    }
+
     @SetterAttribute("Background")
     public static void SetBackground(JFrame frame, String colour)
     {
