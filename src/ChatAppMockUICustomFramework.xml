@@ -4,34 +4,51 @@
     Width="1080" Height="720"
     Background="{Binding backgroundColourPrimary}">
     <Window.Resources>
-        <Resource Key="margin" Value="5,5,5,5"/>
+        <Resource Key="clientEntryTextMargin" Value="5,5,5,5"/>
     </Window.Resources>
+    <!-- TODO: *.Styles (styles entry to apply to types) -->
     <Grid>
         <Grid.ColumnDefinitions>
             <!-- TODO: Binding for these values. (Currently resources work, binding does not). -->
             <ColumnDefinition/>
             <ColumnDefinition Width="0.7"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" Name="clientList" Background="{Binding backgroundColourSecondary}" Margin="{Resource margin}">
-            <Grid Background="{Binding backgroundColourTertiary}">
-                <Label Content="Client" Foreground="{Binding foregroundColour}" HorizontalAlignment="Left"/>
-                <Label Content="IP" Foreground="{Binding foregroundColour}" HorizontalAlignment="Right"/>
+
+        <!-- #region Clients list -->
+        <StackPanel Grid.Column="0" Name="clientList" Background="{Binding backgroundColourSecondary}" Margin="5,5,5,0">
+
+            <!-- #region Client entry -->
+            <Grid Background="{Binding backgroundColourTertiary}" VerticalAlignment="Center" Margin="5,5,0,5">
+                <Label Text="Client" Foreground="{Binding foregroundColour}" HorizontalAlignment="Left" Margin="{Resource clientEntryTextMargin}"/>
+                <Label Text="IP" Foreground="{Binding foregroundColour}" HorizontalAlignment="Right" Margin="{Resource clientEntryTextMargin}"/>
             </Grid>
+            <!-- #endregion -->
+
         </StackPanel>
-        <Grid Grid.Column="1" Background="{Binding backgroundColourSecondary}">
+        <!-- #endregion -->
+
+        <!-- #region Chat area -->
+        <Grid Grid.Column="1" Background="{Binding backgroundColourSecondary}" Margin="5,5,5,5">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="10px"/>
             </Grid.RowDefinitions>
+
+            <!-- #region Chat box -->
             <TextBlock Name="chatBox" Grid.Row="0" Background="{Binding backgroundColourTertiary}" IsReadOnly="true"/>
+            <!-- #endregion -->
+
+            <!-- #region Input box -->
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="5px"/>
                 </Grid.ColumnDefinitions>
                 <TextBox Name="inputBox" Grid.Column="0" Background="{Binding backgroundColourTertiary}"/>
-                <Button Name="sendButton" Grid.Column="1" Content="Send" Background="{Binding backgroundColourTertiary}" Foreground="{Binding foregroundColour}"/>
+                <Button Name="sendButton" Grid.Column="1" Content="Send" Background="{Binding backgroundColourTertiary}" Foreground="{Binding foregroundColour}" Click="SendButton_OnClick"/>
             </Grid>
+            <!-- #endregion -->
         </Grid>
+        <!-- #endregion -->
     </Grid>
 </Window>

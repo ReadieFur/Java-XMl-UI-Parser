@@ -1,47 +1,41 @@
-import java.awt.Color;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
 public class ChatAppMockUI
 {
     public ChatAppMockUI()
     {
-        JFrame frame = new JFrame("Chat App");
+        JFrame frame = new JFrame("Vertical List Example");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1080, 720);
+        frame.setSize(600, 300); // set the size of the window
 
-        //Panel with 2 columns
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
-        frame.add(panel);
-
-        //Left column
-        JPanel leftColumn = new JPanel();
-        leftColumn.setBackground(Color.RED);
-
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
+
+        // Create a list of items
+        String[] items = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5"};
+
+        // Add each item to the main panel
+        for (int i = 0; i < items.length; i++) {
+            JLabel label = new JLabel(items[i]);
+            constraints.gridx = 0;
+            constraints.gridy = i;
+            constraints.insets = new Insets(5, 5, 5, 5);
+            constraints.anchor = GridBagConstraints.NORTHWEST; // align to the top-left
+            constraints.fill = GridBagConstraints.NONE; // don't expand
+            mainPanel.add(label, constraints);
+        }
+
+        // Add an empty label to fill any extra space
+        JLabel emptyLabel = new JLabel();
         constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.weightx = 0.3;
-        constraints.weighty = 1;
-        constraints.fill = GridBagConstraints.BOTH;
-        panel.add(leftColumn, constraints);
+        constraints.gridy = items.length;
+        constraints.weighty = 1.0; // fill any extra space
+        mainPanel.add(emptyLabel, constraints);
 
-        //Right column
-        JPanel rightColumn = new JPanel();
-        rightColumn.setBackground(Color.BLUE);
-
-        constraints = new GridBagConstraints();
-        constraints.gridx = 1;
-        constraints.gridy = 0;
-        constraints.weightx = 0.7;
-        constraints.weighty = 1;
-        constraints.fill = GridBagConstraints.BOTH;
-        panel.add(rightColumn, constraints);
-
+        // Add the main panel to the frame and display it
+        frame.add(mainPanel);
         frame.setVisible(true);
     }
 }

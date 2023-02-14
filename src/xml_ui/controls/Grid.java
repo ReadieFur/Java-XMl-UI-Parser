@@ -87,8 +87,8 @@ public class Grid
             //Get/set the desired constraints for the child.
             GridBagConstraints constraints = new GridBagConstraints();
 
-            SetAlignment(constraints, child);
-            SetMargin(constraints, child);
+            SetAlignmentFromNode(constraints, child);
+            SetMarginFromNode(constraints, child);
 
             if (child.hasAttributes())
             {
@@ -268,10 +268,11 @@ public class Grid
         }
     }
 
-    private static void SetAlignment(GridBagConstraints constraints, Node node) throws InvalidXMLException
+    public static void SetAlignmentFromNode(GridBagConstraints constraints, Node node) throws InvalidXMLException
     {
         if (!node.hasAttributes())
         {
+            //Default values.
             constraints.anchor = GridBagConstraints.CENTER;
             constraints.fill = GridBagConstraints.BOTH;
             return;
@@ -343,6 +344,7 @@ public class Grid
                         constraints.anchor = GridBagConstraints.NORTHEAST;
                         break;
                     case GridBagConstraints.HORIZONTAL:
+                        constraints.anchor = GridBagConstraints.NORTH;
                         constraints.fill = GridBagConstraints.HORIZONTAL;
                         break;
                     default:
@@ -382,6 +384,7 @@ public class Grid
                         constraints.anchor = GridBagConstraints.SOUTHEAST;
                         break;
                     case GridBagConstraints.HORIZONTAL:
+                        constraints.anchor = GridBagConstraints.SOUTH;
                         constraints.fill = GridBagConstraints.HORIZONTAL;
                         break;
                     default:
@@ -392,12 +395,15 @@ public class Grid
                 switch (horizontalAlignment)
                 {
                     case GridBagConstraints.WEST:
+                        constraints.anchor = GridBagConstraints.WEST;
                         constraints.fill = GridBagConstraints.VERTICAL;
                         break;
                     case GridBagConstraints.CENTER:
-                        constraints.fill = GridBagConstraints.BOTH;
+                        constraints.anchor = GridBagConstraints.CENTER;
+                        constraints.fill = GridBagConstraints.VERTICAL;
                         break;
                     case GridBagConstraints.EAST:
+                        constraints.anchor = GridBagConstraints.EAST;
                         constraints.fill = GridBagConstraints.VERTICAL;
                         break;
                     case GridBagConstraints.HORIZONTAL:
@@ -412,7 +418,7 @@ public class Grid
         }
     }
 
-    private static void SetMargin(GridBagConstraints constraints, Node node) throws InvalidXMLException
+    public static void SetMarginFromNode(GridBagConstraints constraints, Node node) throws InvalidXMLException
     {
         if (!node.hasAttributes())
         {

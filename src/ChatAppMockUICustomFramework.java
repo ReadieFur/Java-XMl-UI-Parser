@@ -7,6 +7,7 @@ import org.xml.sax.SAXException;
 
 import xml_ui.Observable;
 import xml_ui.attributes.BindingAttribute;
+import xml_ui.attributes.EventCallbackAttribute;
 import xml_ui.controls.Window;
 import xml_ui.exceptions.InvalidXMLException;
 
@@ -31,5 +32,11 @@ public class ChatAppMockUICustomFramework extends Window
     {
         super();
         rootComponent.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    @EventCallbackAttribute
+    private static void SendButton_OnClick(Object[] args)
+    {
+        System.out.println("Send button clicked!");
     }
 }

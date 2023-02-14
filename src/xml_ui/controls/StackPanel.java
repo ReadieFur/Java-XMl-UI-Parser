@@ -1,9 +1,13 @@
 package xml_ui.controls;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.w3c.dom.Node;
@@ -22,8 +26,11 @@ public class StackPanel
     public static JPanel Create()
     {
         JPanel panel = new JPanel();
-        //Default to using a vertical layout.
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setLayout(new GridBagLayout());
+
+        //After some short researching, I found that you can store custom properties on a component which will help this method out A LOT.
+        //The reason I thought of doing this is because C# has a similar feature for its WPF framework.
+
         return panel;
     }
 
@@ -31,17 +38,12 @@ public class StackPanel
     public static JPanel SetOrientation(JPanel panel, String orientation) throws InvalidXMLException
     {
         if (orientation.equals("Horizontal"))
-        {
-            panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-        }
+            panel.putClientProperty("Orientation", "Horizontal");
         else if (orientation.equals("Vertical"))
-        {
-            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        }
+            panel.putClientProperty("Orientation", "Vertical");
         else
-        {
             throw new InvalidXMLException("Invalid orientation: " + orientation);
-        }
+
         return panel;
     }
 
@@ -55,7 +57,133 @@ public class StackPanel
     @ChildBuilderAttribute
     public static void AddChildren(UIBuilderFactory builder, JPanel panel, List<Node> children) throws InvalidXMLException
     {
-        for (Node child : children)
-            panel.add(builder.ParseXMLNode(child));
+        String orientation = GetOrientation(panel);
+
+        for (int i = 0; i < children.size(); i++)
+        {
+            final Node child = children.get(i);
+
+            //Build constraints for the child.
+            GridBagConstraints constraints = GetConstraintsForOrientation(orientation, i);
+            Grid.SetMarginFromNode(constraints, child);
+
+            panel.add(builder.ParseXMLNode(child), constraints);
+        }
+
+        //We only need to call the ComputeFiller at this stage as calling it for any of the other methods would be redundant.
+        ComputeFiller(panel);
+
+        //Panel validation is not required at this stage as the panel will not be visible yet abd so will be validated when shown.
+    }
+
+    /**
+     * Adds a child to the panel and refreshes it.
+     */
+    public static void AddChild(JPanel panel, Component child)
+    {
+        //Add the child to the panel.
+        panel.add(child, GetConstraintsForOrientation(GetOrientation(panel), GetChildCount(panel)));
+
+        //Update the filler component.
+        ComputeFiller(panel);
+
+        //This method should automatically refresh the panel.
+        panel.validate();
+    }
+
+    private static GridBagConstraints GetConstraintsForOrientation(String orientation, int index)
+    {
+        GridBagConstraints constraints = new GridBagConstraints();
+        if (orientation.equals("Vertical"))
+        {
+            constraints.fill = GridBagConstraints.HORIZONTAL;
+            constraints.weightx = 1.0;
+            constraints.gridx = 0;
+            constraints.gridy = index;
+        }
+        else if (orientation.equals("Horizontal"))
+        {
+            constraints.fill = GridBagConstraints.VERTICAL;
+            constraints.weighty = 1.0;
+            constraints.gridx = index;
+            constraints.gridy = 0;
+        }
+        return constraints;
+    }
+
+    /**
+     * Removes a child from the panel and refreshes it.
+     */
+    public static void RemoveChild(JPanel panel, Component child)
+    {
+        panel.remove(child);
+        ComputeFiller(panel);
+        panel.validate();
+    }
+
+    /**
+     * Gets the number of direct children on this panel, excluding the filler component.
+     */
+    public static int GetChildCount(JPanel panel)
+    {
+        Object fillerComponent = panel.getClientProperty("fillerComponent");
+
+        int childCount = 0;
+        for (Component child : panel.getComponents())
+            if (child != fillerComponent)
+                childCount++;
+
+        return childCount;
+    }
+
+    /**
+     * Adds or updates a filler component to the panel to pad any extra space.
+     * <br></br>
+     * NOTE: This method does not re-render the panel.
+     */
+    public static void ComputeFiller(JPanel panel)
+    {
+        Object _fillerComponent = panel.getClientProperty("fillerComponent");
+        if (!(_fillerComponent instanceof Component))
+        {
+            //Add a basic component which will be used to fill any extra space.
+            _fillerComponent = new JLabel();
+            panel.putClientProperty("fillerComponent", _fillerComponent);
+        }
+        Component fillerComponent = (Component)_fillerComponent;
+
+        String orientation = GetOrientation(panel);
+
+        int childCount = GetChildCount(panel);
+
+        GridBagConstraints constraints = new GridBagConstraints();
+        if (orientation.equals("Vertical"))
+        {
+            constraints.gridx = 0;
+            constraints.gridy = childCount; //Place after the last child.
+            constraints.weighty = 1.0; //Fill any extra space along the y axis.
+        }
+        else if (orientation.equals("Horizontal"))
+        {
+            constraints.gridx = childCount;
+            constraints.gridy = 0; //Place after the last child.
+            constraints.weightx = 1.0; //Fill any extra space along the x axis.
+        }
+
+        //Remove the old filler component if it exists.
+        panel.remove(fillerComponent);
+        panel.add(fillerComponent, constraints);
+    }
+
+    public static String GetOrientation(JPanel panel)
+    {
+        Object orientation = panel.getClientProperty("Orientation");
+        if (!(orientation instanceof String))
+        {
+            //Default to using a vertical layout.
+            orientation = "Vertical";
+            panel.putClientProperty("Orientation", orientation);
+        }
+        return (String)orientation;
     }
 }
