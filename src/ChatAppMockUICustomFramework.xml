@@ -39,7 +39,7 @@
 
             <!-- #region Chat box -->
             <Scrollable Grid.Row="0" Margin="4,4,2,4">
-                <StackPanel Background="{Binding backgroundColourTertiary}">
+                <StackPanel Name="chatBox" Background="{Binding backgroundColourTertiary}" Orientation="BottomToTop">
                     <TextBlock Background="{Binding backgroundColourTertiary}" IsReadOnly="true" Margin="{Resource chatBoxEntryMargin}" Content="[Client 1] Hello, World!"/>
                 </StackPanel>
                 <!-- I am not using a text block for the messages because consistently having text appear at the bottom of the page would be a struggle.
