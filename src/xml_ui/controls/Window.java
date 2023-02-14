@@ -17,6 +17,9 @@ import xml_ui.attributes.SetterAttribute;
 import xml_ui.exceptions.InvalidXMLException;
 import xml_ui.factory.UIBuilderFactory;
 
+/**
+ * Converts an XML {@code Window} component into a {@link javax.swing.JFrame} component.
+ */
 public class Window extends XMLRootComponent<JFrame>
 {
     //#region XML Helpers (static)

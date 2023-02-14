@@ -1,6 +1,7 @@
 package xml_ui.factory;
 
 import java.awt.Component;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
@@ -50,8 +51,9 @@ public class UIBuilderFactory
     private final Map<Class<?>, FactoryComponentWrapper> xmlComponentWrappers = new HashMap<>();
     /**
      * Used primarily for the first iteration of the recursive method to make sure that root components cannot be used as children.
+     * By default, this is set to true.
      */
-    private Boolean doRootComponentCheck;
+    private Boolean doRootComponentCheck = true;
     /**
      * A map of XML component names to their corresponding {@link Component} instances.
      */

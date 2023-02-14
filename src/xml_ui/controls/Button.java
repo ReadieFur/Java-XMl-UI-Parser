@@ -9,6 +9,9 @@ import xml_ui.attributes.CreateComponentAttribute;
 import xml_ui.attributes.EventAttribute;
 import xml_ui.attributes.SetterAttribute;
 
+/**
+ * Converts an XML {@code Button} component into a {@link javax.swing.JButton} component.
+ */
 public class Button
 {
     private Button(){}

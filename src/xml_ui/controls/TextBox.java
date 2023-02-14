@@ -7,6 +7,9 @@ import javax.swing.JTextField;
 import xml_ui.attributes.CreateComponentAttribute;
 import xml_ui.attributes.SetterAttribute;
 
+/**
+ * Converts an XML {@code TextBox} component into a {@link javax.swing.JTextField} component.
+ */
 public class TextBox
 {
     private TextBox(){}

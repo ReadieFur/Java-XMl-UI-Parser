@@ -19,6 +19,9 @@ import xml_ui.attributes.SetterAttribute;
 import xml_ui.exceptions.InvalidXMLException;
 import xml_ui.factory.UIBuilderFactory;
 
+/**
+ * Converts an XML {@code Grid} component into a {@link javax.swing.JPanel} component configured with a {@link java.awt.GridBagLayout}.
+ */
 public class Grid
 {
     private Grid(){}

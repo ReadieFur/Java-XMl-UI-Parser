@@ -7,6 +7,9 @@ import javax.swing.JLabel;
 import xml_ui.attributes.CreateComponentAttribute;
 import xml_ui.attributes.SetterAttribute;
 
+/**
+ * Converts an XML {@code Label} component into a {@link javax.swing.JLabel} component.
+ */
 public class Label
 {
     private Label(){}

@@ -22,6 +22,7 @@ import org.xml.sax.SAXException;
 
 import xml_ui.attributes.BindingAttribute;
 import xml_ui.attributes.EventCallbackAttribute;
+import xml_ui.attributes.NamedComponentAttribute;
 import xml_ui.exceptions.InvalidXMLException;
 import xml_ui.factory.UIBuilderFactory;
 
@@ -197,11 +198,39 @@ public class XMLRootComponent<TRootComponent extends Component>
         }
         //#endregion
 
-        //Begin building the UI component tree.
-        UIBuilderFactory uiBuilderFactory = new UIBuilderFactory(xmlNamespaces, resources, bindableMembers, eventCallbacks);
+        //#region Build the UI tree.
+        UIBuilderFactory uiBuilderFactory = new UIBuilderFactory(
+            xmlNamespaces,
+            resources,
+            bindableMembers,
+            eventCallbacks);
         uiBuilderFactory.SetDoRootComponentCheckForNextCall(false);
         rootComponent = (TRootComponent)uiBuilderFactory.ParseXMLNode(xmlRootElement);
         namedComponents = uiBuilderFactory.GetNamedComponents();
+        //#endregion
+
+        //#region Set the class named components
+        for (Field field : this.getClass().getDeclaredFields())
+        {
+            Annotation[] attributes = field.getAnnotations();
+
+            for (Annotation attribute : attributes)
+            {
+                if (!(attribute instanceof NamedComponentAttribute))
+                    continue;
+
+                if (!Component.class.isAssignableFrom(field.getType()))
+                    throw new IllegalArgumentException(
+                        "Named component fields must be of type Component. (" + this.getClass().getSimpleName() + "::" + field.getName() + ")");
+
+                if (!namedComponents.containsKey(field.getName()))
+                    throw new InvalidXMLException("The named component '" + field.getName() + "' is not defined in the XML document.");
+
+                field.setAccessible(true);
+                field.set(this, namedComponents.get(field.getName()));
+            }
+        }
+        //#endregion
     }
 
     protected <T extends Component> T GetNamedComponent(String componentName, Class<T> componentClass)

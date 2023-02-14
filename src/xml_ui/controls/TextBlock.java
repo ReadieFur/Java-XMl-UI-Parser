@@ -7,6 +7,9 @@ import javax.swing.JTextArea;
 import xml_ui.attributes.CreateComponentAttribute;
 import xml_ui.attributes.SetterAttribute;
 
+/**
+ * Converts an XML {@code TextBlock} component into a {@link javax.swing.JTextArea} component.
+ */
 public class TextBlock
 {
     private TextBlock(){}

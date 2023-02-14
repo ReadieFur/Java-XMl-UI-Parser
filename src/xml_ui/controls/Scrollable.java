@@ -12,6 +12,9 @@ import xml_ui.attributes.SetterAttribute;
 import xml_ui.exceptions.InvalidXMLException;
 import xml_ui.factory.UIBuilderFactory;
 
+/**
+ * Converts an XML {@code Scrollable} component into a {@link javax.swing.JScrollPane} component.
+ */
 public class Scrollable
 {
     private Scrollable(){}

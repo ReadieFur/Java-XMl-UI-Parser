@@ -17,6 +17,9 @@ import xml_ui.attributes.SetterAttribute;
 import xml_ui.exceptions.InvalidXMLException;
 import xml_ui.factory.UIBuilderFactory;
 
+/**
+ * Converts an XML {@code StackPanel} component into a {@link javax.swing.JPanel} component configured to to stack it's children.
+ */
 public class StackPanel
 {
     private static final String ORIENTATION = "Orientation";
