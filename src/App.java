@@ -1,5 +1,7 @@
 import javax.swing.*;
 
+import nestedTest.NestedTest;
+
 public class App
 {
     public static void main(String[] args)
@@ -40,6 +42,7 @@ public class App
             ChatAppMockUICustomFramework frameworkUI = new ChatAppMockUICustomFramework();
             frameworkUI.Show();
             // new ChatAppMockUI();
+            // new NestedTest().Show();
         }
         catch (Exception ex)
         {
