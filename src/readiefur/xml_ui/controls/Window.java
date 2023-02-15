@@ -1,4 +1,4 @@
-package xml_ui.controls;
+package readiefur.xml_ui.controls;
 
 import java.awt.Color;
 import java.awt.event.WindowEvent;
@@ -10,12 +10,12 @@ import javax.swing.WindowConstants;
 
 import org.w3c.dom.Node;
 
-import xml_ui.ManualResetEvent;
-import xml_ui.attributes.ChildBuilderAttribute;
-import xml_ui.attributes.SetterAttribute;
-import xml_ui.exceptions.InvalidXMLException;
-import xml_ui.factory.UIBuilderFactory;
-import xml_ui.interfaces.IRootComponent;
+import readiefur.xml_ui.ManualResetEvent;
+import readiefur.xml_ui.attributes.ChildBuilderAttribute;
+import readiefur.xml_ui.attributes.SetterAttribute;
+import readiefur.xml_ui.exceptions.InvalidXMLException;
+import readiefur.xml_ui.factory.UIBuilderFactory;
+import readiefur.xml_ui.interfaces.IRootComponent;
 
 public class Window extends JFrame implements IRootComponent
 {

@@ -1,4 +1,4 @@
-package xml_ui.attributes;
+package readiefur.xml_ui.attributes;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
  * <br><br/>
  * <b>Constraints:</b>
  * <ul>
- *  <li>Can only be attached to a {@link xml_ui.Observable}<{@link java.lang.String}> {@code field}.</li>
+ *  <li>Can only be attached to a {@link readiefur.xml_ui.Observable}<{@link java.lang.String}> {@code field}.</li>
  * </ul>
  */
 @Retention(RetentionPolicy.RUNTIME)

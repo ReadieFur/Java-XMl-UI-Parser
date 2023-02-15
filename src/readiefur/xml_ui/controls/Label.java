@@ -1,9 +1,9 @@
-package xml_ui.controls;
+package readiefur.xml_ui.controls;
 
 import javax.swing.JLabel;
 
-import xml_ui.attributes.SetterAttribute;
-import xml_ui.exceptions.InvalidXMLException;
+import readiefur.xml_ui.attributes.SetterAttribute;
+import readiefur.xml_ui.exceptions.InvalidXMLException;
 
 public class Label extends JLabel
 {

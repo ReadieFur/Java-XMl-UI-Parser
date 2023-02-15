@@ -1,4 +1,4 @@
-package xml_ui.factory;
+package readiefur.xml_ui.factory;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -15,10 +15,10 @@ import javax.swing.JComponent;
 
 import org.w3c.dom.Node;
 
-import xml_ui.Helpers;
-import xml_ui.Observable;
-import xml_ui.exceptions.InvalidXMLException;
-import xml_ui.interfaces.IRootComponent;
+import readiefur.xml_ui.Helpers;
+import readiefur.xml_ui.Observable;
+import readiefur.xml_ui.exceptions.InvalidXMLException;
+import readiefur.xml_ui.interfaces.IRootComponent;
 
 /**
  * A factory class that is used to build a Component tree from an XML node.

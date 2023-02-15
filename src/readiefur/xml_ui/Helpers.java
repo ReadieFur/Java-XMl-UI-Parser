@@ -1,4 +1,4 @@
-package xml_ui;
+package readiefur.xml_ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.w3c.dom.Node;
 
-import xml_ui.exceptions.InvalidXMLException;
+import readiefur.xml_ui.exceptions.InvalidXMLException;
 
 public class Helpers
 {

@@ -1,4 +1,4 @@
-package xml_ui.factory;
+package readiefur.xml_ui.factory;
 
 import java.awt.Component;
 import java.lang.annotation.Annotation;
@@ -14,10 +14,10 @@ import java.util.function.Consumer;
 
 import org.w3c.dom.Node;
 
-import xml_ui.attributes.ChildBuilderAttribute;
-import xml_ui.attributes.EventAttribute;
-import xml_ui.attributes.SetterAttribute;
-import xml_ui.exceptions.InvalidXMLException;
+import readiefur.xml_ui.attributes.ChildBuilderAttribute;
+import readiefur.xml_ui.attributes.EventAttribute;
+import readiefur.xml_ui.attributes.SetterAttribute;
+import readiefur.xml_ui.exceptions.InvalidXMLException;
 
 public class FactoryComponentWrapper
 {

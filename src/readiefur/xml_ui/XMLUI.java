@@ -1,4 +1,4 @@
-package xml_ui;
+package readiefur.xml_ui;
 
 import java.awt.Component;
 import java.io.IOException;
@@ -20,12 +20,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-import xml_ui.attributes.BindingAttribute;
-import xml_ui.attributes.EventCallbackAttribute;
-import xml_ui.attributes.NamedComponentAttribute;
-import xml_ui.exceptions.InvalidXMLException;
-import xml_ui.factory.UIBuilderFactory;
-import xml_ui.interfaces.IRootComponent;
+import readiefur.xml_ui.attributes.BindingAttribute;
+import readiefur.xml_ui.attributes.EventCallbackAttribute;
+import readiefur.xml_ui.attributes.NamedComponentAttribute;
+import readiefur.xml_ui.exceptions.InvalidXMLException;
+import readiefur.xml_ui.factory.UIBuilderFactory;
+import readiefur.xml_ui.interfaces.IRootComponent;
 
 /**
  * The base class for all XMLUI classes.

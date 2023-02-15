@@ -1,4 +1,4 @@
-package xml_ui.controls;
+package readiefur.xml_ui.controls;
 
 import java.awt.Component;
 import java.awt.GridBagLayout;
@@ -10,10 +10,10 @@ import javax.swing.JPanel;
 
 import org.w3c.dom.Node;
 
-import xml_ui.attributes.ChildBuilderAttribute;
-import xml_ui.attributes.SetterAttribute;
-import xml_ui.exceptions.InvalidXMLException;
-import xml_ui.factory.UIBuilderFactory;
+import readiefur.xml_ui.attributes.ChildBuilderAttribute;
+import readiefur.xml_ui.attributes.SetterAttribute;
+import readiefur.xml_ui.exceptions.InvalidXMLException;
+import readiefur.xml_ui.factory.UIBuilderFactory;
 
 public class StackPanel extends JPanel
 {

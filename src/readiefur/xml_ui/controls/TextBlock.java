@@ -1,8 +1,8 @@
-package xml_ui.controls;
+package readiefur.xml_ui.controls;
 
 import javax.swing.JTextArea;
 
-import xml_ui.attributes.SetterAttribute;
+import readiefur.xml_ui.attributes.SetterAttribute;
 
 public class TextBlock extends JTextArea
 {

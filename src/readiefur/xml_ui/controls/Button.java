@@ -1,11 +1,11 @@
-package xml_ui.controls;
+package readiefur.xml_ui.controls;
 
 import java.util.function.Consumer;
 
 import javax.swing.JButton;
 
-import xml_ui.attributes.EventAttribute;
-import xml_ui.attributes.SetterAttribute;
+import readiefur.xml_ui.attributes.EventAttribute;
+import readiefur.xml_ui.attributes.SetterAttribute;
 
 public class Button extends JButton
 {

@@ -1,8 +1,8 @@
-import xml_ui.Observable;
-import xml_ui.XMLUI;
-import xml_ui.attributes.BindingAttribute;
-import xml_ui.attributes.EventCallbackAttribute;
-import xml_ui.controls.Window;
+import readiefur.xml_ui.Observable;
+import readiefur.xml_ui.XMLUI;
+import readiefur.xml_ui.attributes.BindingAttribute;
+import readiefur.xml_ui.attributes.EventCallbackAttribute;
+import readiefur.xml_ui.controls.Window;
 
 public class UI extends XMLUI<Window>
 {

@@ -1,4 +1,4 @@
-package xml_ui;
+package readiefur.xml_ui;
 
 public class Pair<T1, T2>
 {

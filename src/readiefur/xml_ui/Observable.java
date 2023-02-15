@@ -1,4 +1,4 @@
-package xml_ui;
+package readiefur.xml_ui;
 
 import java.util.ArrayList;
 import java.util.List;

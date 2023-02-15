@@ -1,4 +1,4 @@
-package xml_ui.exceptions;
+package readiefur.xml_ui.exceptions;
 
 public class InvalidXMLException extends Exception
 {

@@ -1,11 +1,11 @@
-package xml_ui.controls;
+package readiefur.xml_ui.controls;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JTextField;
 
-import xml_ui.attributes.SetterAttribute;
+import readiefur.xml_ui.attributes.SetterAttribute;
 
 public class TextBox extends JTextField
 {

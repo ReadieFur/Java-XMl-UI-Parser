@@ -1,4 +1,4 @@
-package xml_ui.attributes;
+package readiefur.xml_ui.attributes;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -12,7 +12,7 @@ import java.lang.annotation.RetentionPolicy;
  *  <li>Must be {@code public}</li>
  *  <li>Must take two parameters:
  *  <ul>
- *      <li>UI Builder Factory: {@link xml_ui.factory.UIBuilderFactory}</li>
+ *      <li>UI Builder Factory: {@link readiefur.xml_ui.factory.UIBuilderFactory}</li>
  *      <li>Child nodes: {@link java.util.List}<{@link org.w3c.dom.Node}></li>
  *  </ul>
  *  </li>
