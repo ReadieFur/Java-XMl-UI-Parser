@@ -32,25 +32,25 @@ public class Window extends JFrame implements IRootComponent
         addWindowListener(new WindowListener()
         {
             @Override
-            public void windowClosed(WindowEvent e) { WindowClosed(e); }
+            public void windowClosed(WindowEvent e) { OnWindowClosed(e); }
 
             @Override
-            public void windowClosing(WindowEvent e) { WindowClosing(e); }
+            public void windowClosing(WindowEvent e) { OnWindowClosing(e); }
 
             @Override
-            public void windowOpened(WindowEvent e) { WindowOpened(e); }
+            public void windowOpened(WindowEvent e) { OnWindowOpened(e); }
 
             @Override
-            public void windowIconified(WindowEvent e) { WindowIconified(e); }
+            public void windowIconified(WindowEvent e) { OnWindowIconified(e); }
 
             @Override
-            public void windowDeiconified(WindowEvent e) { WindowDeiconified(e); }
+            public void windowDeiconified(WindowEvent e) { OnWindowDeiconified(e); }
 
             @Override
-            public void windowActivated(WindowEvent e) { WindowActivated(e); }
+            public void windowActivated(WindowEvent e) { OnWindowActivated(e); }
 
             @Override
-            public void windowDeactivated(WindowEvent e) { WindowDeactivated(e); }
+            public void windowDeactivated(WindowEvent e) { OnWindowDeactivated(e); }
         });
     }
 
@@ -150,20 +150,20 @@ public class Window extends JFrame implements IRootComponent
         dialogueResetEvent.WaitOne();
     }
 
-    protected void WindowClosed(WindowEvent e)
+    protected void OnWindowClosed(WindowEvent e)
     {
         dialogueResetEvent.Set();
     }
 
-    protected void WindowClosing(WindowEvent e) {}
+    protected void OnWindowClosing(WindowEvent e) {}
 
-    protected void WindowOpened(WindowEvent e) {}
+    protected void OnWindowOpened(WindowEvent e) {}
 
-    protected void WindowIconified(WindowEvent e) {}
+    protected void OnWindowIconified(WindowEvent e) {}
 
-    protected void WindowDeiconified(WindowEvent e) {}
+    protected void OnWindowDeiconified(WindowEvent e) {}
 
-    protected void WindowActivated(WindowEvent e) {}
+    protected void OnWindowActivated(WindowEvent e) {}
 
-    protected void WindowDeactivated(WindowEvent e) {}
+    protected void OnWindowDeactivated(WindowEvent e) {}
 }
