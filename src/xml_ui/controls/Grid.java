@@ -1,6 +1,5 @@
 package xml_ui.controls;
 
-import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ import org.w3c.dom.Node;
 import xml_ui.Helpers;
 import xml_ui.Pair;
 import xml_ui.attributes.ChildBuilderAttribute;
-import xml_ui.attributes.SetterAttribute;
 import xml_ui.exceptions.InvalidXMLException;
 import xml_ui.factory.UIBuilderFactory;
 

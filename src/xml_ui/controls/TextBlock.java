@@ -1,12 +1,8 @@
 package xml_ui.controls;
 
-import java.awt.Color;
-import java.awt.Font;
-
 import javax.swing.JTextArea;
 
 import xml_ui.attributes.SetterAttribute;
-import xml_ui.exceptions.InvalidXMLException;
 
 public class TextBlock extends JTextArea
 {

@@ -1,14 +1,11 @@
 package xml_ui.controls;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.util.function.Consumer;
 
 import javax.swing.JCheckBox;
 
 import xml_ui.attributes.EventAttribute;
 import xml_ui.attributes.SetterAttribute;
-import xml_ui.exceptions.InvalidXMLException;
 
 public class CheckBox extends JCheckBox
 {

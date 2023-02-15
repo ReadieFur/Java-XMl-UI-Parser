@@ -1,5 +1,3 @@
-import javax.swing.JFrame;
-
 import xml_ui.Observable;
 import xml_ui.XMLUI;
 import xml_ui.attributes.BindingAttribute;

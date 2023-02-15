@@ -1,8 +1,5 @@
 package xml_ui.controls;
 
-import java.awt.Color;
-import java.awt.Font;
-
 import javax.swing.JLabel;
 
 import xml_ui.attributes.SetterAttribute;
