@@ -1,17 +1,23 @@
 package readiefur.xml_ui.controls;
 
+import java.awt.event.ActionEvent;
 import java.util.function.Consumer;
 
 import javax.swing.JCheckBox;
 
+import readiefur.Event;
 import readiefur.xml_ui.attributes.EventAttribute;
 import readiefur.xml_ui.attributes.SetterAttribute;
 
 public class CheckBox extends JCheckBox
 {
+    public final Event<ActionEvent> onClick = new Event<>();
+
     public CheckBox()
     {
         super();
+
+        addActionListener(this::OnClick);
     }
 
     @SetterAttribute("Text")
@@ -35,6 +41,8 @@ public class CheckBox extends JCheckBox
     @EventAttribute("Click")
     public void SetClick(Consumer<Object[]> callback)
     {
-        addActionListener(e -> callback.accept(new Object[]{}));
+        onClick.Add(e -> callback.accept(new Object[]{ e }));
     }
+
+    protected void OnClick(ActionEvent e) { onClick.Invoke(e); }
 }
