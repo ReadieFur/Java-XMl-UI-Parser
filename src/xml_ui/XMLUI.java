@@ -35,7 +35,9 @@ public class XMLUI<TRootComponent extends Component & IRootComponent>
 {
     private final Map<String, Component> namedComponents;
 
-    protected TRootComponent rootComponent;
+    /*Originally I had this as a protected field however there isn't too much point in that because it would be
+     *restricting more than it's worth and in Java you can't hide fields like in C# how you can with the new keyword.*/
+    public final TRootComponent rootComponent;
 
     protected XMLUI() throws IOException, ParserConfigurationException, SAXException, InvalidXMLException, IllegalArgumentException, IllegalAccessException
     {
