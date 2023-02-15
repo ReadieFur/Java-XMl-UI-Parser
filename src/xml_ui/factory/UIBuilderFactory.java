@@ -1,7 +1,7 @@
 package xml_ui.factory;
 
 import java.awt.Component;
-import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.w3c.dom.Node;
 
 import xml_ui.Helpers;
 import xml_ui.Observable;
-import xml_ui.XMLRootComponent;
+import xml_ui.XMLUI;
 import xml_ui.exceptions.InvalidXMLException;
 
 /**
@@ -110,7 +110,7 @@ public class UIBuilderFactory
 
         if (doRootComponentCheck)
         {
-            if (XMLRootComponent.class.isAssignableFrom(cls))
+            if (XMLUI.class.isAssignableFrom(cls))
                 throw new InvalidXMLException("Cannot use '" + cls.getName() + "' at this level.");
         }
         else
@@ -120,7 +120,10 @@ public class UIBuilderFactory
 
         final FactoryComponentWrapper componentWrapper = GetXMLComponentWrapperForClass(cls);
 
-        Component component = componentWrapper.CreateComponent();
+        Component component;
+        try { component = componentWrapper.CreateComponent(); }
+        catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
+        { throw new InvalidXMLException("Failed to create component '" + cls.getName() + "'.", ex); }
 
         //Parse the attributes.
         ReplaceResourceReferences(xmlNode);

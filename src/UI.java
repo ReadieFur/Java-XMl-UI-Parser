@@ -1,11 +1,12 @@
 import javax.swing.JFrame;
 
 import xml_ui.Observable;
+import xml_ui.XMLUI;
 import xml_ui.attributes.BindingAttribute;
 import xml_ui.attributes.EventCallbackAttribute;
 import xml_ui.controls.Window;
 
-public class UI extends Window
+public class UI extends XMLUI<Window>
 {
     @BindingAttribute(DefaultValue = "#FF0000")
     private Observable<String> backgroundColour;
@@ -13,13 +14,11 @@ public class UI extends Window
     public UI() throws Exception
     {
         super();
-        rootComponent.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    @Override
     public void Show()
     {
-        super.Show();
+        rootComponent.Show();
         new Thread(() ->
         {
             try { Thread.sleep(2500); }

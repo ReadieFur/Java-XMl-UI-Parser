@@ -14,37 +14,30 @@ import org.w3c.dom.Node;
 import xml_ui.Helpers;
 import xml_ui.Pair;
 import xml_ui.attributes.ChildBuilderAttribute;
-import xml_ui.attributes.CreateComponentAttribute;
 import xml_ui.attributes.SetterAttribute;
 import xml_ui.exceptions.InvalidXMLException;
 import xml_ui.factory.UIBuilderFactory;
 
-/**
- * Converts an XML {@code Grid} component into a {@link javax.swing.JPanel} component configured with a {@link java.awt.GridBagLayout}.
- */
-public class Grid
+public class Grid extends JPanel
 {
-    private Grid(){}
-
-    @CreateComponentAttribute
-    public static JPanel Create()
+    public Grid()
     {
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
-        panel.setOpaque(false);
-        return panel;
+        super();
+
+        setLayout(new GridBagLayout());
+        setOpaque(false);
     }
 
     @SetterAttribute("Background")
-    public static void SetBackground(JPanel panel, String colour)
+    public void SetBackground(String colour)
     {
-        panel.setOpaque(true);
-        panel.setBackground(Color.decode(colour));
+        setOpaque(true);
+        setBackground(Color.decode(colour));
     }
 
     //TODO: XML binding for grid layout. (Currently resources work, binding does not).
     @ChildBuilderAttribute
-    public static void AddChildren(UIBuilderFactory builder, JPanel panel, List<Node> children) throws InvalidXMLException
+    public void AddChildren(UIBuilderFactory builder, List<Node> children) throws InvalidXMLException
     {
         //#region Get the grid property nodes and child nodes
         List<Pair<Integer, Float>> rowDefinitions = new ArrayList<>();
@@ -188,7 +181,7 @@ public class Grid
                     constraints.gridwidth = columnSpan;
                 }
 
-                panel.add(builder.ParseXMLNode(child), constraints);
+                add(builder.ParseXMLNode(child), constraints);
             }
         }
         //#endregion

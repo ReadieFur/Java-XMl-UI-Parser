@@ -4,57 +4,50 @@ import java.awt.Color;
 
 import javax.swing.JTextArea;
 
-import xml_ui.attributes.CreateComponentAttribute;
 import xml_ui.attributes.SetterAttribute;
 
-/**
- * Converts an XML {@code TextBlock} component into a {@link javax.swing.JTextArea} component.
- */
-public class TextBlock
+public class TextBlock extends JTextArea
 {
-    private TextBlock(){}
-
-    @CreateComponentAttribute
-    public static JTextArea Create()
+    public TextBlock()
     {
-        return new JTextArea();
+        super();
     }
 
     @SetterAttribute("Background")
-    public static void SetBackground(JTextArea textBlock, String colour)
+    public void SetBackground(String colour)
     {
-        textBlock.setBackground(Color.decode(colour));
+        setBackground(Color.decode(colour));
     }
 
     @SetterAttribute("Foreground")
-    public static void SetForeground(JTextArea textBlock, String colour)
+    public void SetForeground(String colour)
     {
-        textBlock.setForeground(Color.decode(colour));
+        setForeground(Color.decode(colour));
     }
 
     @SetterAttribute("Content")
-    public static void SetContent(JTextArea textBlock, String value)
+    public void SetContent(String value)
     {
         //Replace all newline breaks with new lines.
         value = value.replace("\\n", "\n");
-        textBlock.setText(value);
+        setText(value);
     }
 
     @SetterAttribute("Enabled")
-    public static void SetEnabled(JTextArea textBlock, String value)
+    public void SetEnabled(String value)
     {
-        textBlock.setEnabled(Boolean.parseBoolean(value));
+        setEnabled(Boolean.parseBoolean(value));
     }
 
     @SetterAttribute("Wrap")
-    public static void SetWrap(JTextArea textBlock, String value)
+    public void SetWrap(String value)
     {
-        textBlock.setLineWrap(Boolean.parseBoolean(value));
+        setLineWrap(Boolean.parseBoolean(value));
     }
 
     @SetterAttribute("IsReadOnly")
-    public static void SetIsReadOnly(JTextArea textBlock, String value)
+    public void SetIsReadOnly(String value)
     {
-        textBlock.setEditable(!Boolean.parseBoolean(value));
+        setEditable(!Boolean.parseBoolean(value));
     }
 }

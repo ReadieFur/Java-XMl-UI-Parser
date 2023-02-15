@@ -4,43 +4,36 @@ import java.awt.Color;
 
 import javax.swing.JTextField;
 
-import xml_ui.attributes.CreateComponentAttribute;
 import xml_ui.attributes.SetterAttribute;
 
-/**
- * Converts an XML {@code TextBox} component into a {@link javax.swing.JTextField} component.
- */
-public class TextBox
+public class TextBox extends JTextField
 {
-    private TextBox(){}
-
-    @CreateComponentAttribute
-    public static JTextField Create()
+    public TextBox()
     {
-        return new JTextField();
+        super();
     }
 
     @SetterAttribute("Background")
-    public static void SetBackground(JTextField textBox, String colour)
+    public void SetBackground(String colour)
     {
-        textBox.setBackground(Color.decode(colour));
+        setBackground(Color.decode(colour));
     }
 
     @SetterAttribute("Foreground")
-    public static void SetForeground(JTextField textBox, String colour)
+    public void SetForeground(String colour)
     {
-        textBox.setForeground(Color.decode(colour));
+        setForeground(Color.decode(colour));
     }
 
     @SetterAttribute("Value")
-    public static void SetValue(JTextField textBox, String value)
+    public void SetValue(String value)
     {
-        textBox.setText(value);
+        setText(value);
     }
 
     @SetterAttribute("Enabled")
-    public static void SetEnabled(JTextField textBox, String value)
+    public void SetEnabled(String value)
     {
-        textBox.setEnabled(Boolean.parseBoolean(value));
+        setEnabled(Boolean.parseBoolean(value));
     }
 }
