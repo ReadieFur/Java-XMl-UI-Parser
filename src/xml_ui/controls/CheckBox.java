@@ -35,40 +35,6 @@ public class CheckBox extends JCheckBox
         setSelected(Boolean.parseBoolean(checked));
     }
 
-    @SetterAttribute("Weight")
-    public void SetWeight(String weight) throws InvalidXMLException
-    {
-        switch (weight)
-        {
-            case "BoldItalic":
-                setFont(getFont().deriveFont(getFont().getStyle() | Font.BOLD | Font.ITALIC));
-                break;
-            case "Bold":
-                setFont(getFont().deriveFont(getFont().getStyle() | Font.BOLD));
-                break;
-            case "Italic":
-                setFont(getFont().deriveFont(getFont().getStyle() | Font.ITALIC));
-                break;
-            case "Normal":
-                setFont(getFont().deriveFont(getFont().getStyle() & ~Font.BOLD & ~Font.ITALIC));
-                break;
-            default:
-                throw new InvalidXMLException("Invalid weight '" + weight + "'.");
-        }
-    }
-
-    @SetterAttribute("Size")
-    public void SetSize(String size)
-    {
-        setFont(getFont().deriveFont(Float.parseFloat(size)));
-    }
-
-    @SetterAttribute("Font")
-    public void SetFont(String font)
-    {
-        setFont(new Font(font, getFont().getStyle(), getFont().getSize()));
-    }
-
     @EventAttribute("Click")
     public void SetClick(Consumer<Object[]> callback)
     {
