@@ -33,18 +33,6 @@
 //         setSelected(Boolean.parseBoolean(checked));
 //     }
 
-//     @SetterAttribute("Foreground")
-//     public void SetForeground(String colour)
-//     {
-//         setForeground(Color.decode(colour));
-//     }
-
-//     @SetterAttribute("Background")
-//     public void SetBackground(String colour)
-//     {
-//         setBackground(Color.decode(colour));
-//     }
-
 //     @EventAttribute("Click")
 //     public void SetClick(Consumer<Object[]> callback)
 //     {

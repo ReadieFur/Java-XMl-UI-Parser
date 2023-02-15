@@ -48,13 +48,6 @@ public class StackPanel extends JPanel
             throw new InvalidXMLException("Invalid orientation: " + orientation);
     }
 
-    @SetterAttribute("Background")
-    public void SetBackground(String colour)
-    {
-        setOpaque(true);
-        setBackground(Color.decode(colour));
-    }
-
     @ChildBuilderAttribute
     public void AddChildren(UIBuilderFactory builder, List<Node> children) throws InvalidXMLException
     {

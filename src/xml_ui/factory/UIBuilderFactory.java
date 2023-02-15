@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import javax.swing.JComponent;
+
 import org.w3c.dom.Node;
 
 import xml_ui.Helpers;
@@ -199,6 +201,8 @@ public class UIBuilderFactory
                 }
                 else if (attributeName.equals("Background"))
                 {
+                    if (component instanceof JComponent)
+                        ((JComponent)component).setOpaque(true);
                     component.setBackground(Color.decode(attributeValue));
                 }
                 //#endregion

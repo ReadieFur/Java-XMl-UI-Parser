@@ -28,13 +28,6 @@ public class Grid extends JPanel
         setOpaque(false);
     }
 
-    @SetterAttribute("Background")
-    public void SetBackground(String colour)
-    {
-        setOpaque(true);
-        setBackground(Color.decode(colour));
-    }
-
     //TODO: XML binding for grid layout. (Currently resources work, binding does not).
     @ChildBuilderAttribute
     public void AddChildren(UIBuilderFactory builder, List<Node> children) throws InvalidXMLException

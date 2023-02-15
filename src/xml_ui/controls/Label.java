@@ -21,13 +21,6 @@ public class Label extends JLabel
         setText(text);
     }
 
-    @SetterAttribute("Background")
-    public void SetBackground(String colour)
-    {
-        setOpaque(true);
-        setBackground(Color.decode(colour));
-    }
-
     /**
      * If the element is inside of a grid then the default alignment will be the HorizontalAlignment of the grid.
      */

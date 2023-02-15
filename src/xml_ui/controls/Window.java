@@ -102,12 +102,6 @@ public class Window extends JFrame implements IRootComponent
         setResizable(Boolean.parseBoolean(resizable));
     }
 
-    @SetterAttribute("Background")
-    public void SetBackground(String colour)
-    {
-        getContentPane().setBackground(Color.decode(colour));
-    }
-
     @ChildBuilderAttribute
     public void AddChild(UIBuilderFactory builder, List<Node> children) throws InvalidXMLException
     {
