@@ -10,6 +10,7 @@ import javax.swing.WindowConstants;
 
 import org.w3c.dom.Node;
 
+import readiefur.Event;
 import readiefur.ManualResetEvent;
 import readiefur.xml_ui.attributes.ChildBuilderAttribute;
 import readiefur.xml_ui.attributes.SetterAttribute;
@@ -22,6 +23,14 @@ public class Window extends JFrame implements IRootComponent
     private Boolean addedChild = false;
     private ManualResetEvent dialogueResetEvent = new ManualResetEvent(false);
 
+    public final Event<WindowEvent> onWindowClosed = new Event<>();
+    public final Event<WindowEvent> onWindowClosing = new Event<>();
+    public final Event<WindowEvent> onWindowOpened = new Event<>();
+    public final Event<WindowEvent> onWindowIconified = new Event<>();
+    public final Event<WindowEvent> onWindowDeiconified = new Event<>();
+    public final Event<WindowEvent> onWindowActivated = new Event<>();
+    public final Event<WindowEvent> onWindowDeactivated = new Event<>();
+
     public Window()
     {
         super();
@@ -32,10 +41,10 @@ public class Window extends JFrame implements IRootComponent
         addWindowListener(new WindowListener()
         {
             @Override
-            public void windowClosed(WindowEvent e) { OnWindowClosed(e); }
+            public void windowClosing(WindowEvent e) { OnWindowClosing(e); }
 
             @Override
-            public void windowClosing(WindowEvent e) { OnWindowClosing(e); }
+            public void windowClosed(WindowEvent e) { OnWindowClosed(e); }
 
             @Override
             public void windowOpened(WindowEvent e) { OnWindowOpened(e); }
@@ -150,20 +159,21 @@ public class Window extends JFrame implements IRootComponent
         dialogueResetEvent.WaitOne();
     }
 
+    protected void OnWindowClosing(WindowEvent e) { onWindowClosing.Invoke(e); }
+
     protected void OnWindowClosed(WindowEvent e)
     {
         dialogueResetEvent.Set();
+        onWindowClosing.Invoke(e);
     }
 
-    protected void OnWindowClosing(WindowEvent e) {}
+    protected void OnWindowOpened(WindowEvent e) { onWindowOpened.Invoke(e); }
 
-    protected void OnWindowOpened(WindowEvent e) {}
+    protected void OnWindowIconified(WindowEvent e) { onWindowIconified.Invoke(e); }
 
-    protected void OnWindowIconified(WindowEvent e) {}
+    protected void OnWindowDeiconified(WindowEvent e) { onWindowDeiconified.Invoke(e); }
 
-    protected void OnWindowDeiconified(WindowEvent e) {}
+    protected void OnWindowActivated(WindowEvent e) { onWindowActivated.Invoke(e); }
 
-    protected void OnWindowActivated(WindowEvent e) {}
-
-    protected void OnWindowDeactivated(WindowEvent e) {}
+    protected void OnWindowDeactivated(WindowEvent e) { onWindowDeactivated.Invoke(e); }
 }
