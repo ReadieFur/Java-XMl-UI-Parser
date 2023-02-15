@@ -1,5 +1,6 @@
 package xml_ui.factory;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -13,7 +14,6 @@ import org.w3c.dom.Node;
 
 import xml_ui.Helpers;
 import xml_ui.Observable;
-import xml_ui.XMLUI;
 import xml_ui.exceptions.InvalidXMLException;
 import xml_ui.interfaces.IRootComponent;
 
@@ -140,20 +140,20 @@ public class UIBuilderFactory
                 String attributeName = attribute.getNodeName();
                 String attributeValue = attribute.getNodeValue();
 
-                //Try to set the attribute as a named component.
+                //#region If attribute is a name:
                 if (attributeName.equals("Name"))
                 {
                     if (namedComponents.containsKey(attributeValue))
                         throw new InvalidXMLException("The XML component name '" + attributeValue + "' is already in use.");
 
                     namedComponents.put(attributeValue, component);
+                    component.setName(attributeValue);
+
+                    continue;
                 }
-                else if (attributeName.equals("Visible"))
-                {
-                    component.setVisible(Boolean.parseBoolean(attributeValue));
-                }
-                //Try to set the attribute as a setter.
-                else if (setterNames.contains(attributeName))
+                //#endregion
+                //#region Else if setter is available:
+                if (setterNames.contains(attributeName))
                 {
                     //Check if we should bind to a value or just set the value.
                     if (attributeValue.startsWith("{Binding ") && attributeValue.endsWith("}"))
@@ -176,7 +176,8 @@ public class UIBuilderFactory
                         componentWrapper.TrySetAttribute(component, attributeName, attributeValue);
                     }
                 }
-                //Try to set the attribute as an event.
+                //#endregion
+                //#region Else if event is available:
                 else if (eventNames.contains(attributeName))
                 {
                     //Check if the context has a callback for the event.
@@ -185,6 +186,22 @@ public class UIBuilderFactory
 
                     componentWrapper.TryBindEvent(component, attributeName, eventCallbacks.get(attributeValue));
                 }
+                //#endregion
+                //#region Else try to set the property as a generic value (i.e. properties that are not specific to any one component).
+                //The components can override these properties if they want to in which case this code won't be reached.
+                else if (attributeName.equals("Visible"))
+                {
+                    component.setVisible(Boolean.parseBoolean(attributeValue));
+                }
+                else if (attributeName.equals("Foreground"))
+                {
+                    component.setForeground(Color.decode(attributeValue));
+                }
+                else if (attributeName.equals("Background"))
+                {
+                    component.setBackground(Color.decode(attributeValue));
+                }
+                //#endregion
                 /*Otherwise the attribute is unknown.
                  *We don't want to throw an exception here because some attributes may be for parent nodes to read.*/
             }

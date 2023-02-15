@@ -28,10 +28,26 @@ public class Label extends JLabel
         setBackground(Color.decode(colour));
     }
 
-    @SetterAttribute("Foreground")
-    public void SetForeground(String colour)
+    /**
+     * If the element is inside of a grid then the default alignment will be the HorizontalAlignment of the grid.
+     */
+    @SetterAttribute("Alignment")
+    public void SetAlignment(String alignment) throws InvalidXMLException
     {
-        setForeground(Color.decode(colour));
+        switch (alignment)
+        {
+            case "Left":
+                setHorizontalAlignment(LEFT);
+                break;
+            case "Center":
+                setHorizontalAlignment(CENTER);
+                break;
+            case "Right":
+                setHorizontalAlignment(RIGHT);
+                break;
+            default:
+                throw new InvalidXMLException("Invalid alignment '" + alignment + "'.");
+        }
     }
 
     @SetterAttribute("Weight")
@@ -57,13 +73,13 @@ public class Label extends JLabel
     }
 
     @SetterAttribute("Size")
-    public void SetSize(String size) throws InvalidXMLException
+    public void SetSize(String size)
     {
         setFont(getFont().deriveFont(Float.parseFloat(size)));
     }
 
     @SetterAttribute("Font")
-    public void SetFont(String font) throws InvalidXMLException
+    public void SetFont(String font)
     {
         setFont(new Font(font, getFont().getStyle(), getFont().getSize()));
     }
