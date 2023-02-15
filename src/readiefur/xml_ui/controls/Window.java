@@ -10,7 +10,7 @@ import javax.swing.WindowConstants;
 
 import org.w3c.dom.Node;
 
-import readiefur.xml_ui.ManualResetEvent;
+import readiefur.ManualResetEvent;
 import readiefur.xml_ui.attributes.ChildBuilderAttribute;
 import readiefur.xml_ui.attributes.SetterAttribute;
 import readiefur.xml_ui.exceptions.InvalidXMLException;

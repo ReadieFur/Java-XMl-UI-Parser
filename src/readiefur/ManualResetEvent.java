@@ -1,4 +1,4 @@
-package readiefur.xml_ui;
+package readiefur;
 
 import java.util.concurrent.TimeoutException;
 

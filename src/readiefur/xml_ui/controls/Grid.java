@@ -10,8 +10,8 @@ import javax.swing.plaf.InsetsUIResource;
 
 import org.w3c.dom.Node;
 
+import readiefur.Pair;
 import readiefur.xml_ui.Helpers;
-import readiefur.xml_ui.Pair;
 import readiefur.xml_ui.attributes.ChildBuilderAttribute;
 import readiefur.xml_ui.exceptions.InvalidXMLException;
 import readiefur.xml_ui.factory.UIBuilderFactory;
