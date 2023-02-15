@@ -15,6 +15,7 @@ import xml_ui.Helpers;
 import xml_ui.Observable;
 import xml_ui.XMLUI;
 import xml_ui.exceptions.InvalidXMLException;
+import xml_ui.interfaces.IRootComponent;
 
 /**
  * A factory class that is used to build a Component tree from an XML node.
@@ -110,7 +111,8 @@ public class UIBuilderFactory
 
         if (doRootComponentCheck)
         {
-            if (XMLUI.class.isAssignableFrom(cls))
+            //Check if the component implements the IRootComponent interface.
+            if (IRootComponent.class.isAssignableFrom(cls))
                 throw new InvalidXMLException("Cannot use '" + cls.getName() + "' at this level.");
         }
         else
