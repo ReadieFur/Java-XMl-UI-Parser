@@ -10,7 +10,7 @@ import javax.swing.plaf.InsetsUIResource;
 
 import org.w3c.dom.Node;
 
-import readiefur.Pair;
+import readiefur.misc.Pair;
 import readiefur.xml_ui.Helpers;
 import readiefur.xml_ui.attributes.ChildBuilderAttribute;
 import readiefur.xml_ui.exceptions.InvalidXMLException;
@@ -94,13 +94,13 @@ public class Grid extends JPanel
 
                     //Set the row weight.
                     Pair<Integer, Float> rowWeight = rowDefinitions.get(row);
-                    switch (rowWeight.Item1)
+                    switch (rowWeight.item1)
                     {
                         case 1: //Pixels.
-                            constraints.ipady = rowWeight.Item2.intValue();
+                            constraints.ipady = rowWeight.item2.intValue();
                             break;
                         case 2: //Percentage.
-                            constraints.weighty = rowWeight.Item2;
+                            constraints.weighty = rowWeight.item2;
                             break;
                         default: //Shouldn't be reached.
                             break;
@@ -127,13 +127,13 @@ public class Grid extends JPanel
 
                     //Set the column weight.
                     Pair<Integer, Float> columnWeight = columnDefinitions.get(column);
-                    switch (columnWeight.Item1)
+                    switch (columnWeight.item1)
                     {
                         case 1: //Pixels.
-                            constraints.ipadx = columnWeight.Item2.intValue();
+                            constraints.ipadx = columnWeight.item2.intValue();
                             break;
                         case 2: //Percentage.
-                            constraints.weightx = columnWeight.Item2;
+                            constraints.weightx = columnWeight.item2;
                             break;
                         default: //Shouldn't be reached.
                             break;
@@ -224,7 +224,7 @@ public class Grid extends JPanel
         float percentageUsed = 0;
         for (Pair<Integer, Float> definition : definitions)
         {
-            switch (definition.Item1)
+            switch (definition.item1)
             {
                 case 0: //Auto.
                     autoDefinitions++;
@@ -232,7 +232,7 @@ public class Grid extends JPanel
                 case 1: //Pixels.
                     break;
                 case 2: //Percentage.
-                    percentageUsed += definition.Item2;
+                    percentageUsed += definition.item2;
                     break;
                 default: //Shouldn't be reached.
                     break;
@@ -248,7 +248,7 @@ public class Grid extends JPanel
         for (int i = 0; i < definitions.size(); i++)
         {
             Pair<Integer, Float> definition = definitions.get(i);
-            if (definition.Item1 == 0)
+            if (definition.item1 == 0)
             {
                 definitions.set(i, new Pair<>(2, autoWeight));
             }

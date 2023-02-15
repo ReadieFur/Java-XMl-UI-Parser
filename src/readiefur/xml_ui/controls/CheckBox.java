@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 
 import javax.swing.JCheckBox;
 
-import readiefur.Event;
+import readiefur.misc.Event;
 import readiefur.xml_ui.attributes.EventAttribute;
 import readiefur.xml_ui.attributes.SetterAttribute;
 

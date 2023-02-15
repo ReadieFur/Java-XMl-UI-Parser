@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JTextField;
 
-import readiefur.Event;
+import readiefur.misc.Event;
 import readiefur.xml_ui.attributes.SetterAttribute;
 
 public class TextBox extends JTextField
