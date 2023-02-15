@@ -17,6 +17,12 @@
             <Button Content="Button 1" Background="#0000FF" Foreground="#FFFFFF" Click="Button_Click"/>
             <TextBox Value="Text" Enabled="true"/>
             <TextBlock Content="Hello, World!" IsReadOnly="true"/>
+            <CheckBox Text="CheckBox" Checked="true"/>
+            <!-- TODO: Radio button. I have left this out for now as it will need some more complex work for the state managment. -->
+            <!-- <StackPanel Orientation="LeftToRight">
+                <RadioButton Text="Radio 1" Checked="true"/>
+                <RadioButton Text="Radio 2"/>
+            </StackPanel> -->
         </StackPanel>
     </Grid>
 </Window>

@@ -17,6 +17,7 @@ import org.w3c.dom.Node;
 import xml_ui.attributes.ChildBuilderAttribute;
 import xml_ui.attributes.EventAttribute;
 import xml_ui.attributes.SetterAttribute;
+import xml_ui.exceptions.InvalidXMLException;
 
 public class FactoryComponentWrapper
 {
@@ -163,10 +164,10 @@ public class FactoryComponentWrapper
         return true;
     }
 
-    public void ParseChildTree(UIBuilderFactory factory, Component parent, List<Node> childNodes)
+    public void ParseChildTree(UIBuilderFactory factory, Component parent, List<Node> childNodes) throws InvalidXMLException
     {
-        if (childBuilderMethod == null)
-            return;
+        if (!childNodes.isEmpty() && childBuilderMethod == null)
+            throw new InvalidXMLException("The component '" + parent.getClass().getName() + "' cannot have any children.");
 
         InvokeMethod(parent, childBuilderMethod, factory, childNodes);
     }
