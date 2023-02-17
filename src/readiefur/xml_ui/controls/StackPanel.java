@@ -17,11 +17,12 @@ import readiefur.xml_ui.factory.UIBuilderFactory;
 
 public class StackPanel extends JPanel
 {
-    private static final String ORIENTATION = "Orientation";
-    private static final String ORIENTATION_LEFT_TO_RIGHT = "LeftToRight";
-    private static final String ORIENTATION_TOP_TO_BOTTOM = "TopToBottom";
-    private static final String ORIENTATION_RIGHT_TO_LEFT = "RightToLeft";
-    private static final String ORIENTATION_BOTTOM_TO_TOP = "BottomToTop";
+    public static final String ORIENTATION = "Orientation";
+    public static final String ORIENTATION_LEFT_TO_RIGHT = "LeftToRight";
+    public static final String ORIENTATION_TOP_TO_BOTTOM = "TopToBottom";
+    public static final String ORIENTATION_RIGHT_TO_LEFT = "RightToLeft";
+    public static final String ORIENTATION_BOTTOM_TO_TOP = "BottomToTop";
+
     private static final String FILLER_COMPONENT = "fillerComponent";
 
     public StackPanel()
@@ -73,17 +74,28 @@ public class StackPanel extends JPanel
 
     /**
      * Adds a child to the panel and refreshes it.
+     * @param child
+     * @param additionalConstraints Any additional constraints to apply to the child, set to null if none.
      */
-    public void AddChild(Component child)
+    public void AddChild(Component child, GridBagConstraints additionalConstraints)
     {
+        //Get the base constraints for the child.
+        GridBagConstraints constraints = GetConstraintsForOrientation(GetOrientation(), GetChildCount());
+
+        //Add the additional constraints to the constraints.
+        if (additionalConstraints != null)
+        {
+            constraints.insets = additionalConstraints.insets;
+        }
+
         //Add the child to the panel.
-        add(child, GetConstraintsForOrientation(GetOrientation(), GetChildCount()));
+        add(child, constraints);
 
         //Update the filler component.
         ComputeFiller();
 
         //This method should automatically refresh the panel.
-        validate();
+        revalidate();
     }
 
     private static GridBagConstraints GetConstraintsForOrientation(String orientation, int index)
@@ -118,9 +130,42 @@ public class StackPanel extends JPanel
      */
     public void RemoveChild(Component child)
     {
+        //Update the index of all children after the removed child.
+        Boolean updateY = GetOrientation().equals(ORIENTATION_TOP_TO_BOTTOM) || GetOrientation().equals(ORIENTATION_BOTTOM_TO_TOP);
+        Object fillerComponent = getClientProperty(FILLER_COMPONENT);
+        GridBagLayout layout = (GridBagLayout)getLayout();
+        Boolean foundChild = false;
+        for (Component existingChild : getComponents())
+        {
+            if (existingChild == fillerComponent)
+                continue;
+
+            if (foundChild)
+            {
+                //Get the existing constraints for the child, the constraints shouldn't be null.
+                GridBagConstraints constraints = layout.getConstraints(existingChild);
+                if (constraints == null)
+                    throw new NullPointerException("Constraints for child " + existingChild + " are null.");
+
+                //Update the constraints for the child.
+                if (updateY)
+                    constraints.gridy--;
+                else
+                    constraints.gridx--;
+
+                layout.setConstraints(existingChild, constraints);
+            }
+            else if (existingChild == child)
+            {
+                foundChild = true;
+            }
+        }
+
         remove(child);
         ComputeFiller();
-        validate();
+        //Revalidate and repaint called here to refresh the panel.
+        revalidate();
+        repaint();
     }
 
     /**
