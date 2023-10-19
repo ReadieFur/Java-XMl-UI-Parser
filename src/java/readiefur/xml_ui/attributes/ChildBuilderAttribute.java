@@ -2,6 +2,7 @@ package readiefur.xml_ui.attributes;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Used to indicate the child builder for a control.
@@ -20,4 +21,5 @@ import java.lang.annotation.RetentionPolicy;
  * </ul>
  */
 @Retention(RetentionPolicy.RUNTIME)
+@Target(java.lang.annotation.ElementType.METHOD)
 public @interface ChildBuilderAttribute {}

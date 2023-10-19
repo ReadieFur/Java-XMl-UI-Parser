@@ -2,6 +2,7 @@ package readiefur.xml_ui.attributes;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Used to indicate a method that should be called when an event occurs.
@@ -18,4 +19,5 @@ import java.lang.annotation.RetentionPolicy;
  */
 //We use an Object[] as opposed to a List<Object> because we want each callback to have their own array.
 @Retention(RetentionPolicy.RUNTIME)
+@Target(java.lang.annotation.ElementType.METHOD)
 public @interface EventCallbackAttribute {}

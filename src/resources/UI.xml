@@ -1,7 +1,7 @@
 <Window
-    xmlns="readiefur.xml_ui.controls"
-    Title="Test Window" Background="{Binding backgroundColour}"
-    Width="350" Height="525">
+        xmlns="readiefur.xml_ui.controls"
+        Title="Test Window" Background="{Binding backgroundColour}"
+        Width="350" Height="525">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50px"/>

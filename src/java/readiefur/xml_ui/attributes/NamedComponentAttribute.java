@@ -2,6 +2,7 @@ package readiefur.xml_ui.attributes;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Indicates that the attached field should be used as a named component.
@@ -13,4 +14,5 @@ import java.lang.annotation.RetentionPolicy;
  * <li>Must extend {@link java.awt.Component}</li>
  */
 @Retention(RetentionPolicy.RUNTIME)
+@Target(java.lang.annotation.ElementType.FIELD)
 public @interface NamedComponentAttribute {}
